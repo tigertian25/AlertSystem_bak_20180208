@@ -16,7 +16,7 @@ public class SnoozeAccessorImpl extends SnoozeAccessor {
 	private Persistence persistence;
 
 	@Override
-	public AlertSnooze getDuration(int sampleOrderId, int alertTypeId) {
+	public AlertSnooze getSnooze(int sampleOrderId, int alertTypeId) {
 		AlertSnooze alertSnooze = null;
 		try (Transaction tx = persistence.createTransaction()) {
 			EntityManager em = persistence.getEntityManager();
@@ -31,7 +31,7 @@ public class SnoozeAccessorImpl extends SnoozeAccessor {
 	}
 
 	@Override
-	public String update(int sampleOrderId, int alertTypeId) {
+	public String insert(int sampleOrderId, int alertTypeId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

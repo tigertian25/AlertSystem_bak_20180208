@@ -42,7 +42,7 @@ public class AlertCalculatorImpl extends AlertCalculator {
 					Date lastTimestamp = DateUtils.addSeconds(fromTimestamp, allowedDuration);//规定完成时间
 					alert.setLastTimestamp(df.parse(df.format(lastTimestamp)));
 					if (now.getTime() > lastTimestamp.getTime()) {// 当前时间大于规定时间表示超时
-						AlertSnooze duration = snoozeAccessor.getDuration(alert.getSampleOrder().getStyleID(),
+						AlertSnooze duration = snoozeAccessor.getSnooze(alert.getSampleOrder().getStyleID(),
 								alert.getAlertType().getId());
 
 						if (!duration.equals(null) && duration != null) {// 设置了睡眠
