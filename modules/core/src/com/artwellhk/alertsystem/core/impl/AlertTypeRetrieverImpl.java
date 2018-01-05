@@ -21,6 +21,7 @@ public class AlertTypeRetrieverImpl extends AlertTypeRetriever {
 	@Override
 	public List<Alert> retrieveList(List<SampleOrder> sampleOrderList) {
 		List<Alert> alertList=null;
+		if(sampleOrderList.size()>0) {
 		//循环sampleOrderList
 		for (SampleOrder sampleOrder : sampleOrderList) {
 			//判断是否工艺发出
@@ -106,8 +107,8 @@ public class AlertTypeRetrieverImpl extends AlertTypeRetriever {
 			
 			
 		}
-			
-		return null;
+		}
+		return alertList;
 	}
 	
 	protected Boolean isGongYiSend=false;

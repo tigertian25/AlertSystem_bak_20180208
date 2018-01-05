@@ -25,12 +25,5 @@ public class AlertTypeRetrieverImplTest {
 		alertTypeRetriever.retrieveList(sampleOrderList);
 	}
 	
-	/**
-	 * 
-	 */
-	@Test
-	public void testRetrieveList2() {
-		
-	}
-
+	
 }
