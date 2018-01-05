@@ -21,8 +21,7 @@ import com.artwellhk.alertsystem.entity.AlertSnooze;
 @Component(AlertCalculator.NAME)
 public class AlertCalculatorImpl extends AlertCalculator {
 	
-		@Inject
-		List<Alert> alertList;//注入有工序未完成的alertList
+		
 		
 		protected boolean isOverTime(){return false;}
 		protected boolean isSetSnoozeTime(){return false;}
@@ -30,7 +29,8 @@ public class AlertCalculatorImpl extends AlertCalculator {
 		@Override
 		public List<Alert> calculateAlertList() {
 			List<Alert> returnAlertList = new ArrayList<Alert>();
-			if(returnAlertList.size()>0) {
+			List<Alert> alertList=getAlertList();
+			if(alertList.size()>0) {
 				for (Alert alert : alertList) {
 					if(isOverTime()) {//是否超时
 						if(isSetSnoozeTime()) {//是否设置睡眠
@@ -46,5 +46,8 @@ public class AlertCalculatorImpl extends AlertCalculator {
 			}
 			return returnAlertList;
 			
+		}
+		protected List<Alert> getAlertList(){
+			return null;
 		}
 }
