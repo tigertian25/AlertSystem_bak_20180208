@@ -1,5 +1,6 @@
 package com.artwellhk.alertsystem.core.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,10 +21,11 @@ public class AlertTypeRetrieverImpl extends AlertTypeRetriever {
 
 	@Override
 	public List<Alert> retrieveList(List<SampleOrder> sampleOrderList) {
-		List<Alert> alertList=null;
+		List<Alert> alertList=new ArrayList<Alert>();
 		if(sampleOrderList.size()>0) {
 		//循环sampleOrderList
 		for (SampleOrder sampleOrder : sampleOrderList) {
+			
 			//判断是否工艺发出
 			if (!isGongYiSend) {
 				alertList.add(ProcessUndone(sampleOrder,1));
@@ -136,7 +138,7 @@ public class AlertTypeRetrieverImpl extends AlertTypeRetriever {
 	protected Boolean isPingCheReceive=false;
 	
 	protected Alert ProcessUndone(SampleOrder sampleOrder,int type) {
-		Alert alert=null;
+		Alert alert=new Alert();
 		switch (type) {
 		case 1:
 			alert.setSampleOrder(sampleOrder);
