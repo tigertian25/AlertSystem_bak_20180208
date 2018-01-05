@@ -4,7 +4,7 @@ import java.util.List;
 
 public abstract class AlertTypeRetriever {
 	public static final String NAME = "AlertTypeRetriever";
-	//筛选出工序超时的版单
+	//绛涢�夊嚭宸ュ簭鏈畬鎴愮殑鐗堝崟
     public abstract List<Alert> retrieveList(List<SampleOrder> SampleOrderList) ;
 
 }

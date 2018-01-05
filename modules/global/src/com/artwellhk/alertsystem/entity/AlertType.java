@@ -73,6 +73,13 @@ public class AlertType extends BaseIntegerIdEntity {
         return totalMaxDuration;
     }
 
-
+    public AlertType(int id, Process fromProcessId,Process toProcessId,Integer allowedDuration) {
+    	this.id=id;this.fromProcessId=fromProcessId;this.toProcessId=toProcessId;this.allowedDuration=allowedDuration;
+    	
+	}
+    public AlertType(int id, Process fromProcessId,Process toProcessId,Integer allowedDuration,Integer singleMaxDuration,Integer totalMaxDuration) {
+    	this.id=id;this.fromProcessId=fromProcessId;this.toProcessId=toProcessId;this.allowedDuration=allowedDuration;
+    	this.singleMaxDuration=singleMaxDuration;this.totalMaxDuration=totalMaxDuration;
+    }
 
 }
