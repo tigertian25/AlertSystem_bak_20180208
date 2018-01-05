@@ -82,4 +82,8 @@ public class AlertType extends BaseIntegerIdEntity {
     	this.singleMaxDuration=singleMaxDuration;this.totalMaxDuration=totalMaxDuration;
     }
 
+	public AlertType() {
+		// TODO Auto-generated constructor stub
+	}
+
 }

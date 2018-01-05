@@ -1,30 +1,251 @@
 package com.artwellhk.alertsystem.core.impl;
 
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.artwellhk.alertsystem.core.Alert;
 import com.artwellhk.alertsystem.core.SampleOrder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
-public class AlertTypeRetrieverImplTest {
+public class AlertTypeRetrieverImplTest extends AlertTypeRetrieverImpl{
+	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+	private Logger log = LoggerFactory.getLogger(AlertTypeRetrieverImplTest.class);
 
-	AlertTypeRetrieverImpl alertTypeRetriever;
-	 
+	
 	/**
-	 * 
+	 * 工艺未发出
 	 */
+	@Override
+	protected Boolean isGongYiSend() {return false;}
 	@Test
-	public void testRetrieveList() {
-		alertTypeRetriever=new AlertTypeRetrieverImpl();
-		alertTypeRetriever.isGongYiSend=false;
+	public void testRetrieveList_isGongYiSend() {
+		
+		
 		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
 		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
-		alertTypeRetriever.retrieveList(sampleOrderList);
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+        String alertListString=gson.toJson(alertList);
+        log.debug("工艺未发出："+alertListString);
+	}
+	/**
+	 * 工艺未收回
+	 */
+	@Override
+	protected Boolean isGongYiReceive() {return false;}
+	@Test
+	public void testRetrieveList_isGongYiReceive() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("工艺未收回："+alertListString);
+	}
+	/**
+	 * 画花未发出
+	 */
+	@Test
+	public void testRetrieveList_isHuaHuaSend() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("画花未发出："+alertListString);
+	}
+	/**
+	 * 画花未收回
+	 */
+	@Test
+	public void testRetrieveList_isHuaHuaReceive() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("画花未收回："+alertListString);
+	}
+	/**
+	 * 电机未发出
+	 */
+	@Test
+	public void testRetrieveList_isDianJiSend() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("电机未发出："+alertListString);
+	}
+	/**
+	 * 电机未收回
+	 */
+	@Test
+	public void testRetrieveList_isDianJiReceive() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("电机未收回："+alertListString);
+	}
+	/**
+	 * 套口未发出
+	 */
+	@Test
+	public void testRetrieveList_isTaoKouSend() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("套口未发出："+alertListString);
+	}
+	/**
+	 * 套口未收回
+	 */
+	@Test
+	public void testRetrieveList_isTaoKouReceive() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("套口未收回："+alertListString);
+	}
+	/**
+	 * 手缝未发出
+	 */
+	@Test
+	public void testRetrieveList_isShouFengSend() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("手缝未发出："+alertListString);
+	}
+	/**
+	 * 手缝未收回
+	 */
+	@Test
+	public void testRetrieveList_isShouFengReceive() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("手缝未收回："+alertListString);
+	}
+	/**
+	 * 洗水未发出
+	 */
+	@Test
+	public void testRetrieveList_isXiShuiSend() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("洗水未发出："+alertListString);
+	}
+	/**
+	 * 洗水未收回
+	 */
+	@Test
+	public void testRetrieveList_isXiShuiReceive() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("洗水未收回："+alertListString);
+	}
+	/**
+	 * 烫衣未发出
+	 */
+	@Test
+	public void testRetrieveList_isTangYiSend() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("烫衣未发出："+alertListString);
+	}
+	/**
+	 * 烫衣未收回
+	 */
+	@Test
+	public void testRetrieveList_isTangYiReceive() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("烫衣未收回："+alertListString);
+	}
+	/**
+	 * 平车未发出
+	 */
+	@Test
+	public void testRetrieveList_isPingCheSend() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("平车未发出："+alertListString);
+	}
+	/**
+	 * 平车未收回
+	 */
+	@Test
+	public void testRetrieveList_isPingCheReceive() {
+		
+		
+		List<SampleOrder> sampleOrderList=new ArrayList<SampleOrder>();
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		List<Alert> alertList=retrieveList(sampleOrderList);
+		
+		String alertListString=gson.toJson(alertList);
+		log.debug("平车未收回："+alertListString);
 	}
 	
 	

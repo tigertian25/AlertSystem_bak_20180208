@@ -16,7 +16,7 @@ import com.artwellhk.alertsystem.entity.AlertType;
 import com.artwellhk.alertsystem.entity.Process;
 
 @Component(AlertTypeRetriever.NAME)
-public class AlertTypeRetrieverImpl extends AlertTypeRetriever {
+public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 
 
 	@Override
@@ -27,83 +27,83 @@ public class AlertTypeRetrieverImpl extends AlertTypeRetriever {
 		for (SampleOrder sampleOrder : sampleOrderList) {
 			
 			//判断是否工艺发出
-			if (!isGongYiSend) {
-				alertList.add(ProcessUndone(sampleOrder,1));
+			if (!isGongYiSend()) {
+				alertList.add(gongYiSend(sampleOrder));
 				continue;
 			}
 			//判断是否工艺收回
-			if(!isGongYiReceive) {
-				alertList.add(ProcessUndone(sampleOrder,11));
+			if(!isGongYiReceive()) {
+				alertList.add(gongYiReceive(sampleOrder));
 				continue;
 			}
 			//判断是否画花发出
-			if(!isHuaHuaSend) {
-				alertList.add(ProcessUndone(sampleOrder,2));
+			if(!isHuaHuaSend()) {
+				alertList.add(huaHuaSend(sampleOrder));
 				continue;
 			}
 			//判断是否画花收回
-			if(!isHuaHuaReceive) {
-				alertList.add(ProcessUndone(sampleOrder,22));
+			if(!isHuaHuaReceive()) {
+				alertList.add(huaHuaReceive(sampleOrder));
 				continue;
 			}
 			//判断是否电机发出
-			if(!isDianJiSend) {
-				alertList.add(ProcessUndone(sampleOrder,3));
+			if(!isDianJiSend()) {
+				alertList.add(dianJiSend(sampleOrder));
 				continue;
 			}
 			//判断是否电机收回
-			if(!isDianJiReceive) {
-				alertList.add(ProcessUndone(sampleOrder,33));
+			if(!isDianJiReceive()) {
+				alertList.add(dianJiReceive(sampleOrder));
 				continue;
 			}
 			//判断是否套口发出
-			if(!isTaoKouSend) {
-				alertList.add(ProcessUndone(sampleOrder,4));
+			if(!isTaoKouSend()) {
+				alertList.add(taoKouSend(sampleOrder));
 				continue;
 			}
 			//判断是否套口收回
-			if(!isTaoKouReceive) {
-				alertList.add(ProcessUndone(sampleOrder,44));
+			if(!isTaoKouReceive()) {
+				alertList.add(taoKouReceive(sampleOrder));
 				continue;
 			}
 			//判断是否手缝发出
-			if(!isHuaHuaSend) {
-				alertList.add(ProcessUndone(sampleOrder,5));
+			if(!isShouFengSend()) {
+				alertList.add(shouFengSend(sampleOrder));
 				continue;
 			}
 			//判断是否手缝收回
-			if(!isShouFengReceive) {
-				alertList.add(ProcessUndone(sampleOrder,55));
+			if(!isShouFengReceive()) {
+				alertList.add(shouFengReceive(sampleOrder));
 				continue;
 			}
 			//判断是否洗水发出
-			if(!isXiShuiSend) {
-				alertList.add(ProcessUndone(sampleOrder,6));
+			if(!isXiShuiSend()) {
+				alertList.add(xiShuiSend(sampleOrder));
 				continue;
 			}
 			//判断是否洗水收回
-			if(!isXiShuiReceive) {
-				alertList.add(ProcessUndone(sampleOrder,66));
+			if(!isXiShuiReceive()) {
+				alertList.add(xiShuiReceive(sampleOrder));
 				continue;
 			}
 			//判断是否烫衣发出
-			if(!isTangYiSend) {
-				alertList.add(ProcessUndone(sampleOrder,7));
+			if(!isTangYiSend()) {
+				alertList.add(tangYiSend(sampleOrder));
 				continue;
 			}
 			//判断是否烫衣收回
-			if(!isTangYiReceive) {
-				alertList.add(ProcessUndone(sampleOrder,77));
+			if(!isTangYiReceive()) {
+				alertList.add(tangYiReceive(sampleOrder));
 				continue;
 			}
 			//判断是否平车发出
-			if(!isPingCheSend) {
-				alertList.add(ProcessUndone(sampleOrder,8));
+			if(!isPingCheSend()) {
+				alertList.add(pingCheSend(sampleOrder));
 				continue;
 			}
 			//判断是否平车收回
-			if(!isPingCheReceive) {
-				alertList.add(ProcessUndone(sampleOrder,88));
+			if(!isPingCheReceive()) {
+				alertList.add(pingCheReceive(sampleOrder));
 				continue;
 			}
 			
@@ -113,119 +113,56 @@ public class AlertTypeRetrieverImpl extends AlertTypeRetriever {
 		return alertList;
 	}
 	
-	protected Boolean isGongYiSend=false;
-	protected Boolean isGongYiReceive=false;
+	protected Boolean isGongYiSend() {return true;}
+	protected Boolean isGongYiReceive() {return true;}
 	
-	protected Boolean isHuaHuaSend=false;
-	protected Boolean isHuaHuaReceive=false;
+	protected Boolean isHuaHuaSend() {return true;}
+	protected Boolean isHuaHuaReceive() {return true;}
 
-	protected Boolean isDianJiSend=false;
-	protected Boolean isDianJiReceive=false;
+	protected Boolean isDianJiSend() {return true;}
+	protected Boolean isDianJiReceive() {return true;}
 	
-	protected Boolean isTaoKouSend=false;
-	protected Boolean isTaoKouReceive=false;
+	protected Boolean isTaoKouSend() {return true;}
+	protected Boolean isTaoKouReceive() {return true;}
 	
-	protected Boolean isShouFengSend=false;
-	protected Boolean isShouFengReceive=false;
+	protected Boolean isShouFengSend() {return true;}
+	protected Boolean isShouFengReceive() {return true;}
 	
-	protected Boolean isXiShuiSend=false;
-	protected Boolean isXiShuiReceive=false;
+	protected Boolean isXiShuiSend() {return true;}
+	protected Boolean isXiShuiReceive() {return true;}
 	
-	protected Boolean isTangYiSend=false;
-	protected Boolean isTangYiReceive=false;
+	protected Boolean isTangYiSend() {return true;}
+	protected Boolean isTangYiReceive() {return true;}
 	
-	protected Boolean isPingCheSend=false;
-	protected Boolean isPingCheReceive=false;
+	protected Boolean isPingCheSend() {return true;}
+	protected Boolean isPingCheReceive() {return true;}
 	
-	protected Alert ProcessUndone(SampleOrder sampleOrder,int type) {
-		Alert alert=new Alert();
-		switch (type) {
-		case 1:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(10, "板房"), new Process(1, "工艺发出"), 60*20));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*20-10));
-			break;
-		case 11:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(1, "工艺发出"), new Process(11, "工艺收回"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 2:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(11, "工艺收回"), new Process(2, "画花发出"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 22:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(2, "画花发出"), new Process(22, "画花收回"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 3:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(22, "画花收回"), new Process(3, "电机发出"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 33:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(3, "电机发出"), new Process(33, "电机收回"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 4:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(33, "电机收回"), new Process(4, "套口发出"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 44:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(44, "套口发出"), new Process(5, "套口收回"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 5:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(5, "套口收回"), new Process(55, "手缝发出"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 55:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(55, "手缝发出"), new Process(6, "手缝收回"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 6:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(6, "手缝收回"), new Process(66, "洗水发出"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 66:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(66, "洗水发出"), new Process(7, "洗水收回"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 7:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(7, "洗水收回"), new Process(77, "烫衣发出"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 77:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(77, "烫衣发出"), new Process(8, "烫衣收回"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 8:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(8, "烫衣收回"), new Process(88, "平车发出"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		case 88:
-			alert.setSampleOrder(sampleOrder);
-			alert.setAlertType(new AlertType(1, new Process(88, "平车发出"), new Process(9, "平车收回"), 60*30));
-			alert.setFromTimestamp(DateUtils.addSeconds(new Date(), -60*30-15));
-			break;
-		default:
-			break;
-		}
-		return alert;
-	}
+
+	protected Alert gongYiSend(SampleOrder sampleOrder){return null;}
+	protected Alert gongYiReceive(SampleOrder sampleOrder){return null;}
 	
+	protected Alert huaHuaSend(SampleOrder sampleOrder){return null;}
+	protected Alert huaHuaReceive(SampleOrder sampleOrder){return null;}
+	
+	protected Alert dianJiSend(SampleOrder sampleOrder){return null;}
+	protected Alert dianJiReceive(SampleOrder sampleOrder){return null;}
+	
+	protected Alert taoKouSend(SampleOrder sampleOrder){return null;}
+	protected Alert taoKouReceive(SampleOrder sampleOrder){return null;}
+	
+	protected Alert shouFengSend(SampleOrder sampleOrder){return null;}
+	protected Alert shouFengReceive(SampleOrder sampleOrder){return null;}
+	
+	protected Alert xiShuiSend(SampleOrder sampleOrder){return null;}
+	protected Alert xiShuiReceive(SampleOrder sampleOrder){return null;}
+	
+	protected Alert tangYiSend(SampleOrder sampleOrder){return null;}
+	protected Alert tangYiReceive(SampleOrder sampleOrder){return null;}
+	
+	protected Alert pingCheSend(SampleOrder sampleOrder){return null;}
+	protected Alert pingCheReceive(SampleOrder sampleOrder){return null;}
+			
+		
 	
 	
 	

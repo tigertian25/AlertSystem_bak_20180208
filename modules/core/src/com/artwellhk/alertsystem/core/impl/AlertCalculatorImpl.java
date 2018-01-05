@@ -25,7 +25,7 @@ public class AlertCalculatorImpl extends AlertCalculator {
 	@Inject
 	SnoozeAccessor snoozeAccessor;
 	
-	@Override
+	/*@Override
 	public List<Alert> calculateAlertList() {
 		List<Alert> returnAlertList = new ArrayList<Alert>();
 		List<SampleOrder> sampleOrderList = getSampleOrderList();// 获取未完成的订单列表
@@ -72,8 +72,8 @@ public class AlertCalculatorImpl extends AlertCalculator {
 			}
 		}
 		return returnAlertList;
-	}
-
+	}*/
+	
 	// 计算时间差工具
 		public String dateUtil(String date1, String date2) {
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -117,5 +117,30 @@ public class AlertCalculatorImpl extends AlertCalculator {
 			return SampleOrderList;
 
 		}
-
+		@Inject
+		List<Alert> alertList;//注入有工序未完成的列表
+		
+		protected boolean isOverTime(){return false;}
+		protected boolean isSetSnoozeTime(){return false;}
+		protected boolean isOverSnoozeTime(){return false;}
+		@Override
+		public List<Alert> calculateAlertList() {
+			List<Alert> returnAlertList = new ArrayList<Alert>();
+			if(returnAlertList.size()>0) {
+				for (Alert alert : alertList) {
+					if(isOverTime()) {//是否超时
+						if(isSetSnoozeTime()) {//是否设置睡眠
+							if(isOverSnoozeTime()) {//是否超过睡眠时间
+								returnAlertList.add(alert);
+							}
+							
+						}else {
+							returnAlertList.add(alert);
+						}
+					}
+				}
+			}
+			return returnAlertList;
+			
+		}
 }
