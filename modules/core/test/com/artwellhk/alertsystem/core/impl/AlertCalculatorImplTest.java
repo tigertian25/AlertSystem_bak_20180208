@@ -1,27 +1,38 @@
 package com.artwellhk.alertsystem.core.impl;
 
-import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
+import org.apache.commons.lang.time.DateUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.artwellhk.alertsystem.core.Alert;
-import com.artwellhk.alertsystem.core.AlertTypeRetriever;
-import com.artwellhk.alertsystem.core.SnoozeAccessor;
+import com.artwellhk.alertsystem.core.SampleOrder;
+import com.artwellhk.alertsystem.entity.*;
+import com.artwellhk.alertsystem.entity.Process;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class AlertCalculatorImplTest extends AlertCalculatorImpl {
 	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	private Logger log = LoggerFactory.getLogger(AlertCalculatorImplTest.class);
-	
+	@Override
+	protected boolean isOverTime(){return true;}
+	@Override
+	protected boolean isSetSnoozeTime(){return true;}
+	@Override
+	protected boolean isOverSnoozeTime(){return true;}
 	@Override
 	protected List<Alert> getAlertList(){
-		return null;
+		List<Alert> alertList=new ArrayList<Alert>();
+		AlertType alertType = new AlertType(1, new Process(2, "工艺发出"), new Process(3, "工艺收回"), 60 * 30);
+		Alert alert = new Alert(alertType, DateUtils.addSeconds(new Date(), -60 * 30 - 20), new SampleOrder(123456, "sp-123456"));
+		alertList.add(alert);
+		return alertList;
 	}
 	@Test
 	public void testCalculateAlertList() {
