@@ -18,6 +18,12 @@ public class Alert implements Serializable{
 	private Date lastTimestamp;
 	private SampleOrder sampleOrder;
 	private String timeDifference;
+	
+	public Alert() {}
+	
+	public Alert(AlertType alertType,Date fromTimestamp,SampleOrder sampleOrder) {
+		this.alertType=alertType;this.fromTimestamp=fromTimestamp;this.sampleOrder=sampleOrder;
+	}
 
 	public String getTimeDifference() {
 		return timeDifference;

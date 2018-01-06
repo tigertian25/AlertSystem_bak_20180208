@@ -15,21 +15,19 @@ import com.artwellhk.alertsystem.core.SnoozeAccessor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class AlertCalculatorImplTest {
+public class AlertCalculatorImplTest extends AlertCalculatorImpl {
 	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	private Logger log = LoggerFactory.getLogger(AlertCalculatorImplTest.class);
 	
-	AlertCalculatorImpl AlertCalculator;
-	List<Alert> alertList;
-	 @Before
-	 public void setUp() {
-		 AlertCalculator=new AlertCalculatorImpl();
-		 Alert alert=new Alert();
-		 alertList.add(alert);
-	 }
+	@Override
+	protected List<Alert> getAlertList(){
+		return null;
+	}
 	@Test
 	public void testCalculateAlertList() {
-		AlertCalculator.calculateAlertList();
+		 List<Alert> alertList=calculateAlertList();
+		 String alertListString = gson.toJson(alertList);
+		 log.debug("工艺未发出：" + alertListString);
 	}
 
 }
