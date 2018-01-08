@@ -38,7 +38,7 @@ public class AlertCalculatorImplTest extends AlertCalculatorImpl {
 	public void testCalculateAlertList() {
 		 List<Alert> alertList=calculateAlertList();
 		 String alertListString = gson.toJson(alertList);
-		 log.debug("工艺未发出：" + alertListString);
+		 log.debug("alertList：" + alertListString);
 	}
 
 }
