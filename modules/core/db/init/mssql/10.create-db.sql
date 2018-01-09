@@ -29,6 +29,7 @@ create table ALERTSYSTEM_PROCESS (
     ID integer,
     --
     NAME varchar(255),
+    ZT_WORKING_ID integer,
     --
     primary key (ID)
 )^

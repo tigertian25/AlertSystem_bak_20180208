@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ERPDBMapper">
+	
+	
+
+	<select id="getProcess"  resultType="Map">
+		select
+			*
+		from ALERTSYSTEM_PROCESS 
+	</select>
+	<select id="getStyle"  resultType="Map">
+		SELECT
+			sID,
+			sNumber,
+			xStyleNo,
+			xStatus
+		FROM
+			et_style
+		WHERE
+			xStatus <![CDATA[ < ]]>5
+		AND xStatus <![CDATA[ >= ]]> 0
+		ORDER BY
+			sID DESC
+	</select>
+	<select id="getIssue60ByStyleID" parameterType="int" resultType="Map">
+		SELECT distinct iss.* 
+		FROM
+		lt_issue60 iss
+		LEFT JOIN lt_issue60_bc issbc on iss.sID=issbc.mID
+		
+		WHERE
+			issbc.xBC LIKE CAST (
+				(
+					SELECT
+						card.xCard
+					FROM
+						pt_card card
+					WHERE
+						card.rStyle_ID = ${styleID}
+				) AS VARCHAR
+			) + '%'
+	</select>
+
+	
+</mapper>
