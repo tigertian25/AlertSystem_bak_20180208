@@ -32,7 +32,7 @@ public class Process extends BaseIntegerIdEntity {
 	public String getName() {
 		return name;
 	}
-
+	public Process() {};
 	public Process(int id,String name) {
 		this.id=id;this.name=name;
 	}

@@ -31,7 +31,7 @@ public class SampleOrder implements Serializable {
 	public void setStyleNumber(String styleNumber) {
 		this.styleNumber = styleNumber;
 	}
-
+	public SampleOrder() {}
 	public SampleOrder(int styleID, String styleNumber) {
 		this.styleID = styleID;
 		this.styleNumber = styleNumber;

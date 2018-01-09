@@ -11,24 +11,54 @@
 	</select>
 	<select id="getStyle"  resultType="Map">
 		SELECT
-			sID,
+			TOP 10 ROW_NUMBER () OVER (ORDER BY sID DESC) AS ROWNO,
+			sID AS styleID,
 			sNumber,
 			xStyleNo,
 			xStatus
 		FROM
 			et_style
 		WHERE
-			xStatus <![CDATA[ < ]]>5
+			sID NOT IN (
+				SELECT
+					TOP (10 *(1 - 1)) sID
+				FROM
+					et_style
+				WHERE
+					xStatus  <![CDATA[ < ]]> 5
+				AND xStatus <![CDATA[ >= ]]> 0
+				ORDER BY
+					sID DESC
+			)
+		AND xStatus <![CDATA[ < ]]> 5
 		AND xStatus <![CDATA[ >= ]]> 0
 		ORDER BY
 			sID DESC
-	</select>
-	<select id="getIssue60ByStyleID" parameterType="int" resultType="Map">
-		SELECT distinct iss.* 
-		FROM
-		lt_issue60 iss
-		LEFT JOIN lt_issue60_bc issbc on iss.sID=issbc.mID
 		
+	</select>
+	<!-- 查询电机部及后面工序的发出记录 ，if(iss.*为空){表示电机部未发出}else if(issbc.aStatus=1){是未收回}else if(issbc.aStatus=3){已收回，
+		查询最新一条收回记录，if(收回的工序不是最后工序){返回收回时间}}-->
+	<select id="getIssue60ByStyleID" parameterType="int" resultType="Map">
+		SELECT 
+		 	DISTINCT iss.sID AS '发sID',
+			iss.xDateTime AS '发出时间',
+			iss.rWork_ID AS '发出工序id',
+			isswk.xName '发出工序',
+			emp.xName AS '发出人',
+			issbc.aStatus '收回状态',
+			issbc.aDataID '收sID',
+			rec.xDateTime '收回时间',
+			rec.rWork_ID '收回工序Id',
+			recwk.xName '收回工序'
+		
+		FROM
+			lt_issue60 iss
+		LEFT JOIN lt_issue60_bc issbc ON iss.sID = issbc.mID
+		LEFT JOIN zt_empl emp ON iss.rEmpl_ID = emp.sID
+		LEFT JOIN lt_receive60 rec ON issbc.aDataID = rec.sID
+		LEFT JOIN zt_working isswk ON iss.rWork_ID = isswk.sID
+		LEFT JOIN zt_working recwk ON rec.rWork_ID = recwk.sIDsue60_bc issbc on iss.sID=issbc.mID
+				
 		WHERE
 			issbc.xBC LIKE CAST (
 				(
