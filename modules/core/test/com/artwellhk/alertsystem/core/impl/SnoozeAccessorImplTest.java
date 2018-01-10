@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.artwellhk.alertsystem.entity.AlertSnooze;
+import com.artwellhk.alertsystem.entity.AlertTypeID;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -27,8 +28,9 @@ public class SnoozeAccessorImplTest {
 	@Test
 	public void testInsert() {
 		SnoozeAccessor=new SnoozeAccessorImpl();
-		String result=SnoozeAccessor.insert(1, 1);
+		String result=SnoozeAccessor.insert(1, 1,30*60);
 		 log.debug("SnoozeAccessor新增："+result);
 	}
+	
 
 }

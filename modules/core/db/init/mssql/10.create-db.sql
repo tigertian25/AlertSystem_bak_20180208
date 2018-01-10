@@ -16,7 +16,9 @@ create table ALERTSYSTEM_ALERT_TYPE (
     ID integer,
     --
     FROM_PROCESS_ID integer,
+    FROM_PROCESS_TYPE integer not null,
     TO_PROCESS_ID integer,
+    TO_PROCESS_TYPE integer not null,
     ALLOWED_DURATION integer,
     SINGLE_MAX_DURATION integer,
     TOTAL_MAX_DURATION integer,

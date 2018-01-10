@@ -29,8 +29,8 @@ public class AlertCalculatorImplTest extends AlertCalculatorImpl {
 	@Override
 	protected List<Alert> getAlertList(){
 		List<Alert> alertList=new ArrayList<Alert>();
-		AlertType alertType = new AlertType(1, new Process(2, "工艺发出"), new Process(3, "工艺收回"), 60 * 30);
-		Alert alert = new Alert(alertType, DateUtils.addSeconds(new Date(), -60 * 30 - 20), new SampleOrder(123456, "sp-123456"));
+		AlertType alertType = new AlertType(1, new Process(2, "工艺发出"), new Process(3, "工艺收回"), 60 * 30,1,2);
+		Alert alert = new Alert(alertType, DateUtils.addSeconds(new Date(), -60 * 30 - 20), new SampleOrder(123456, "sp-123456","L123456"),"张三");
 		alertList.add(alert);
 		return alertList;
 	}

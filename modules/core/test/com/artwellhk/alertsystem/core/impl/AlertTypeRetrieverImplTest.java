@@ -31,8 +31,8 @@ public class AlertTypeRetrieverImplTest extends AlertTypeRetrieverImpl {
 
 	@Override
 	protected Alert gongYiSend(SampleOrder sampleOrder) {
-		AlertType alertType = new AlertType(1, new Process(1, "板房"), new Process(2, "工艺发出"), 60 * 30);
-		Alert alert = new Alert(alertType, DateUtils.addSeconds(new Date(), -60 * 30 - 20), sampleOrder);
+		AlertType alertType = new AlertType(1, new Process(1, "板房"), new Process(2, "工艺发出"), 60 * 30,1,2);
+		Alert alert = new Alert(alertType, DateUtils.addSeconds(new Date(), -60 * 30 - 20), sampleOrder,"张三");
 
 		return alert;
 	}
@@ -41,7 +41,7 @@ public class AlertTypeRetrieverImplTest extends AlertTypeRetrieverImpl {
 	public void testRetrieveList_isGongYiSend() {
 
 		List<SampleOrder> sampleOrderList = new ArrayList<SampleOrder>();
-		sampleOrderList.add(new SampleOrder(123456, "sp-123456"));
+		sampleOrderList.add(new SampleOrder(123456, "sp-123456","L123456"));
 		List<Alert> alertList = retrieveList(sampleOrderList);
 
 		String alertListString = gson.toJson(alertList);

@@ -15,6 +15,15 @@ public class SampleOrder implements Serializable {
 	
 	private int styleID;
 	private String styleNumber;
+	private String styleNo;
+
+	public String getStyleNo() {
+		return styleNo;
+	}
+
+	public void setStyleNo(String styleNo) {
+		this.styleNo = styleNo;
+	}
 
 	public int getStyleID() {
 		return styleID;
@@ -32,9 +41,10 @@ public class SampleOrder implements Serializable {
 		this.styleNumber = styleNumber;
 	}
 	public SampleOrder() {}
-	public SampleOrder(int styleID, String styleNumber) {
+	public SampleOrder(int styleID, String styleNumber,String styleNo) {
 		this.styleID = styleID;
 		this.styleNumber = styleNumber;
+		this.styleNo=styleNo;
 	}
 
 	@Override

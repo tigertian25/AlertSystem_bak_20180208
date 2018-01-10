@@ -17,11 +17,17 @@ public class AlertType extends BaseIntegerIdEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FROM_PROCESS_ID")
-    protected Process fromProcessId;
+    protected Process fromProcess;
+
+    @Column(name = "FROM_PROCESS_TYPE", nullable = false)
+    protected Integer fromProcessType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TO_PROCESS_ID")
-    protected Process toProcessId;
+    protected Process toProcess;
+
+    @Column(name = "TO_PROCESS_TYPE", nullable = false)
+    protected Integer toProcessType;
 
     @Column(name = "ALLOWED_DURATION")
     protected Integer allowedDuration;
@@ -32,21 +38,39 @@ public class AlertType extends BaseIntegerIdEntity {
     @Column(name = "TOTAL_MAX_DURATION")
     protected Integer totalMaxDuration;
 
-    public void setFromProcessId(Process fromProcessId) {
-        this.fromProcessId = fromProcessId;
+    public void setFromProcess(Process fromProcess) {
+        this.fromProcess = fromProcess;
     }
 
-    public Process getFromProcessId() {
-        return fromProcessId;
+    public Process getFromProcess() {
+        return fromProcess;
     }
 
-    public void setToProcessId(Process toProcessId) {
-        this.toProcessId = toProcessId;
+    public void setToProcess(Process toProcess) {
+        this.toProcess = toProcess;
     }
 
-    public Process getToProcessId() {
-        return toProcessId;
+    public Process getToProcess() {
+        return toProcess;
     }
+
+
+    public void setFromProcessType(Integer fromProcessType) {
+        this.fromProcessType = fromProcessType;
+    }
+
+    public Integer getFromProcessType() {
+        return fromProcessType;
+    }
+
+    public void setToProcessType(Integer toProcessType) {
+        this.toProcessType = toProcessType;
+    }
+
+    public Integer getToProcessType() {
+        return toProcessType;
+    }
+
 
 
     public void setAllowedDuration(Integer allowedDuration) {
@@ -73,13 +97,14 @@ public class AlertType extends BaseIntegerIdEntity {
         return totalMaxDuration;
     }
 
-    public AlertType(int id, Process fromProcessId,Process toProcessId,Integer allowedDuration) {
-    	this.id=id;this.fromProcessId=fromProcessId;this.toProcessId=toProcessId;this.allowedDuration=allowedDuration;
-    	
+    public AlertType(int id, Process fromProcess,Process toProcess,Integer allowedDuration,Integer fromProcessType,Integer toProcessType) {
+    	this.id=id;this.fromProcess=fromProcess;this.toProcess=toProcess;this.allowedDuration=allowedDuration;
+    	this.fromProcessType=fromProcessType;this.toProcessType=toProcessType;
 	}
-    public AlertType(int id, Process fromProcessId,Process toProcessId,Integer allowedDuration,Integer singleMaxDuration,Integer totalMaxDuration) {
-    	this.id=id;this.fromProcessId=fromProcessId;this.toProcessId=toProcessId;this.allowedDuration=allowedDuration;
+    public AlertType(int id, Process fromProcess,Process toProcess,Integer allowedDuration,Integer fromProcessType,Integer toProcessType,Integer singleMaxDuration,Integer totalMaxDuration) {
+    	this.id=id;this.fromProcess=fromProcess;this.toProcess=toProcess;this.allowedDuration=allowedDuration;
     	this.singleMaxDuration=singleMaxDuration;this.totalMaxDuration=totalMaxDuration;
+    	this.fromProcessType=fromProcessType;this.toProcessType=toProcessType;
     }
 
 	public AlertType() {

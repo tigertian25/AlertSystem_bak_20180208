@@ -18,11 +18,20 @@ public class Alert implements Serializable{
 	private Date lastTimestamp;
 	private SampleOrder sampleOrder;
 	private String timeDifference;
+	private String employeeName;
 	
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+
 	public Alert() {}
 	
-	public Alert(AlertType alertType,Date fromTimestamp,SampleOrder sampleOrder) {
-		this.alertType=alertType;this.fromTimestamp=fromTimestamp;this.sampleOrder=sampleOrder;
+	public Alert(AlertType alertType,Date fromTimestamp,SampleOrder sampleOrder,String employeeName) {
+		this.alertType=alertType;this.fromTimestamp=fromTimestamp;this.sampleOrder=sampleOrder;this.employeeName=employeeName;
 	}
 
 	public String getTimeDifference() {

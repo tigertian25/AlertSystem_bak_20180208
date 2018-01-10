@@ -83,6 +83,7 @@ configure(coreModule) {
         provided(servletApi)
         jdbc(mssql) { exclude(group: 'com.microsoft.azure', module: 'azure-keyvault') }
         testRuntime(mssql) { exclude(group: 'com.microsoft.azure', module: 'azure-keyvault') }
+        jdbc('com.microsoft.sqlserver:mssql-jdbc:6.1.0.jre8') { exclude(group: 'com.microsoft.azure', module: 'azure-keyvault') }
 
     }
 

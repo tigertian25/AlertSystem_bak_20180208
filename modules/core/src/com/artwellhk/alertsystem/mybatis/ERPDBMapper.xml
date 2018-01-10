@@ -2,14 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ERPDBMapper">
 	
-	
+	<resultMap type="com.artwellhk.alertsystem.entity.Process" id="ProcessMap">
+		<id column="ID" property="id"/>
+		<result column="NAME" property="name"/>
+		<result column="ZT_WORKING_ID" property="zt_working_id"/>
+	</resultMap>
 
-	<select id="getProcess"  resultType="Map">
+	<select id="getProcess" parameterType="java.util.Map" resultMap="ProcessMap">
 		select
 			*
 		from ALERTSYSTEM_PROCESS 
+		where 1=1
+		<if test="ztWorkingId != null and ztWorkingId !=''">
+		and ZT_WORKING_ID=#{ztWorkingId}
+		</if>
 	</select>
-	<select id="getStyle"  resultType="Map">
+	<!-- 获取所有未完成的版单-分页 -->
+	<select id="getStylePageList"  resultType="Map">
 		SELECT
 			TOP 10 ROW_NUMBER () OVER (ORDER BY sID DESC) AS ROWNO,
 			sID AS styleID,
@@ -36,29 +45,81 @@
 			sID DESC
 		
 	</select>
-	<!-- 查询电机部及后面工序的发出记录 ，if(iss.*为空){表示电机部未发出}else if(issbc.aStatus=1){是未收回}else if(issbc.aStatus=3){已收回，
-		查询最新一条收回记录，if(收回的工序不是最后工序){返回收回时间}}-->
-	<select id="getIssue60ByStyleID" parameterType="int" resultType="Map">
-		SELECT 
-		 	DISTINCT iss.sID AS '发sID',
-			iss.xDateTime AS '发出时间',
-			iss.rWork_ID AS '发出工序id',
-			isswk.xName '发出工序',
-			emp.xName AS '发出人',
-			issbc.aStatus '收回状态',
-			issbc.aDataID '收sID',
-			rec.xDateTime '收回时间',
-			rec.rWork_ID '收回工序Id',
-			recwk.xName '收回工序'
+	<!-- 获取所有未完成的版单-->
+	<select id="getAllStyle"  resultType="Map">
+		SELECT
+			
+			sID AS styleID,
+			sNumber,
+			xStyleNo
+		FROM
+			et_style
+		WHERE
+			xStatus <![CDATA[ < ]]> 5
+			AND xStatus <![CDATA[ >= ]]> 0
+		ORDER BY
+			sID DESC
 		
+	</select>
+	<select id="getGongYiSend" parameterType="int" resultType="Map">
+		SELECT
+			lsi.sID,
+			lsi.xDateTime AS 'fromTimestamp',
+			emp.xName AS 'employeeName'
+		FROM
+			lt_style_issue lsi
+			LEFT JOIN zt_empl emp ON lsi.rEmpl_ID = emp.sID
+		WHERE lsi.rStyle_ID=#{styleID}
+	</select>
+	<select id="getGongYiReceive" parameterType="int" resultType="Map">
+		SELECT
+			lsr.sID,
+			lsr.xDateTime AS 'fromTimestamp',
+			emp.xName AS 'employeeName'
+		FROM
+			lt_style_receive lsr
+			LEFT JOIN zt_empl emp ON lsr.rEmpl_ID = emp.sID
+		WHERE lsr.rStyle_ID=#{styleID}
+	</select>
+	<select id="getHuaHuaSend" parameterType="int" resultType="Map">
+		SELECT
+			lsi2.sID,
+			lsi2.xDateTime AS 'fromTimestamp',
+			emp.xName AS 'employeeName'
+		FROM
+			lt_style_issue2 lsi2
+			LEFT JOIN zt_empl emp ON lsi2.rEmpl_ID = emp.sID
+		WHERE lsi2.rStyle_ID=#{styleID}
+	</select>
+	<select id="getHuaHuaReceive" parameterType="int" resultType="Map">
+		SELECT
+			lsr2.sID,
+			lsr2.xDateTime AS 'fromTimestamp',
+			emp.xName AS 'employeeName'
+		FROM
+			lt_style_receive lsr2
+			LEFT JOIN zt_empl emp ON lsr2.rEmpl_ID = emp.sID
+		WHERE lsr2.rStyle_ID=#{styleID}
+	</select>
+	<!-- 查询电机部及后面工序的发出记录(查询最新一条收回记录) ，if(iss.*为空){表示电机部未发出}else if(issbc.aStatus=1){是未收回}else if(issbc.aStatus=3){已收回，
+		if(收回的工序不是最后工序){返回收回时间}}-->
+	<select id="getIssue60ByStyleID" parameterType="int" resultType="Map">
+		SELECT DISTINCT
+			TOP (1) iss.sID,
+			iss.xDateTime AS 'sendTime',
+			iss.rWork_ID AS 'sendWorkId',
+			sendEmp.xName AS 'sendEmployee',
+			issbc.aStatus,
+			issbc.aDataID,
+			rec.xDateTime AS 'receiveTime',
+			rec.rWork_ID AS 'receiveWorkId',
+			resieveEmp.xName AS 'receiveName'
 		FROM
 			lt_issue60 iss
 		LEFT JOIN lt_issue60_bc issbc ON iss.sID = issbc.mID
-		LEFT JOIN zt_empl emp ON iss.rEmpl_ID = emp.sID
+		LEFT JOIN zt_empl sendEmp ON iss.rEmpl_ID = sendEmp.sID
 		LEFT JOIN lt_receive60 rec ON issbc.aDataID = rec.sID
-		LEFT JOIN zt_working isswk ON iss.rWork_ID = isswk.sID
-		LEFT JOIN zt_working recwk ON rec.rWork_ID = recwk.sIDsue60_bc issbc on iss.sID=issbc.mID
-				
+		LEFT JOIN zt_empl resieveEmp ON rec.rEmpl_ID = resieveEmp.sID
 		WHERE
 			issbc.xBC LIKE CAST (
 				(
@@ -67,9 +128,10 @@
 					FROM
 						pt_card card
 					WHERE
-						card.rStyle_ID = ${styleID}
+						card.rStyle_ID = #{styleID}
 				) AS VARCHAR
 			) + '%'
+		ORDER BY iss.sID DESC
 	</select>
 
 	

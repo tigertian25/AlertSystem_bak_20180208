@@ -1,13 +1,19 @@
 package com.artwellhk.alertsystem;
 
 import com.haulmont.bali.util.Dom4j;
+import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.testsupport.TestContainer;
+import com.haulmont.cuba.testsupport.TestContext;
+import com.haulmont.cuba.testsupport.TestDataSource;
+
 import org.dom4j.Document;
 import org.dom4j.Element;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import javax.naming.NamingException;
 
 public class AlertsystemTestContainer extends TestContainer {
 
@@ -50,7 +56,17 @@ public class AlertsystemTestContainer extends TestContainer {
         dbUser = resourceElem.attributeValue("username");
         dbPassword = resourceElem.attributeValue("password");
     }
-
+//    @Override
+//    protected void initDataSources() {
+//        super.initDataSources();
+//        try {
+//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//            TestDataSource mydbDataSource = new TestDataSource("jdbc:sqlserver://erp.artwell-hk.com;databaseName=ERPDB", "sample_track", "DOsqQjZ05h0yjRtI1YaI");
+//            TestContext.getInstance().bind(AppContext.getProperty("cuba.dataSourceJndiName_ERPDB"), mydbDataSource);
+//        } catch (ClassNotFoundException | NamingException e) {
+//            throw new RuntimeException("Error initializing datasource",e);
+//        }
+//    }
     public static class Common extends AlertsystemTestContainer {
 
         public static final AlertsystemTestContainer.Common INSTANCE = new AlertsystemTestContainer.Common();
