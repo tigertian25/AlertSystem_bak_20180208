@@ -1,11 +1,10 @@
-package com.artwellhk.alertsystem.core;
+package com.artwellhk.alertsystem.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.artwellhk.alertsystem.entity.AlertType;
 @Component(Alert.NAME)
 public class Alert implements Serializable{
 	public static final String NAME = "Alert";
@@ -32,6 +31,9 @@ public class Alert implements Serializable{
 	
 	public Alert(AlertType alertType,Date fromTimestamp,SampleOrder sampleOrder,String employeeName) {
 		this.alertType=alertType;this.fromTimestamp=fromTimestamp;this.sampleOrder=sampleOrder;this.employeeName=employeeName;
+	}
+	public Alert(AlertType alertType,SampleOrder sampleOrder) {
+		this.alertType=alertType;this.sampleOrder=sampleOrder;
 	}
 
 	public String getTimeDifference() {

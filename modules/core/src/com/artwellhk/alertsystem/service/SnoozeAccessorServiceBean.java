@@ -1,14 +1,12 @@
-package com.artwellhk.alertsystem.core.impl;
+package com.artwellhk.alertsystem.service;
 
-import java.util.Date;
 
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import com.artwellhk.alertsystem.core.SnoozeAccessor;
 import com.artwellhk.alertsystem.entity.AlertSnooze;
 import com.artwellhk.alertsystem.entity.AlertType;
 import com.haulmont.cuba.core.EntityManager;
@@ -18,8 +16,8 @@ import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 
-@Component(SnoozeAccessor.NAME)
-public class SnoozeAccessorImpl extends SnoozeAccessor {
+@Service(SnoozeAccessorService.NAME)
+public class SnoozeAccessorServiceBean implements SnoozeAccessorService {
 	@Inject
 	private Persistence persistence;
 	@Inject

@@ -10,14 +10,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.artwellhk.alertsystem.core.Alert;
-import com.artwellhk.alertsystem.core.SampleOrder;
 import com.artwellhk.alertsystem.entity.*;
 import com.artwellhk.alertsystem.entity.Process;
+import com.artwellhk.alertsystem.service.AlertServiceBean;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class AlertCalculatorImplTest extends AlertCalculatorImpl {
+public class AlertCalculatorImplTest extends AlertServiceBean {
 	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	private Logger log = LoggerFactory.getLogger(AlertCalculatorImplTest.class);
 	@Override

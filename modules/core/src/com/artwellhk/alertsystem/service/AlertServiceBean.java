@@ -1,11 +1,10 @@
-package com.artwellhk.alertsystem.core.impl;
+package com.artwellhk.alertsystem.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -13,26 +12,27 @@ import javax.persistence.NoResultException;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import com.artwellhk.alertsystem.core.Alert;
-import com.artwellhk.alertsystem.core.AlertCalculator;
-import com.artwellhk.alertsystem.core.AlertTypeRetriever;
-import com.artwellhk.alertsystem.core.SampleOrder;
-import com.artwellhk.alertsystem.core.SnoozeAccessor;
 import com.artwellhk.alertsystem.core.util;
+import com.artwellhk.alertsystem.entity.Alert;
 import com.artwellhk.alertsystem.entity.AlertSnooze;
+import com.artwellhk.alertsystem.entity.SampleOrder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.AppBeans;
 
-@Component(AlertCalculator.NAME)
-public class AlertCalculatorImpl extends AlertCalculator {
+@Service(AlertService.NAME)
+public class AlertServiceBean implements AlertService {
+	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	@Inject
 	private Persistence persistence;
 	@Inject
 	private AlertTypeRetriever alertTypeRetriever;
 	@Inject
-	private SnoozeAccessor snoozeAccessor;
+	private SnoozeAccessorService snoozeAccessor;
 
 	protected boolean isOverTime() {
 		return false;
@@ -65,6 +65,11 @@ public class AlertCalculatorImpl extends AlertCalculator {
 //			}
 			for (Alert alert : alertList) {// 循环计算超时的数据
 				try {
+					if(("").equals(alert.getFromTimestamp())||null==alert.getFromTimestamp()) {//工艺未发出
+						System.out.println(gson.toJson(alert));
+						returnAlertList.add(alert);
+						continue;
+					}
 					String timeDifference = "";// 此字段用于显示超时多少时间
 					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					Date now = df.parse(df.format(new Date()));// 当前时间
@@ -111,7 +116,8 @@ public class AlertCalculatorImpl extends AlertCalculator {
 		List<Alert> alertList = new ArrayList<Alert>();
 		List<SampleOrder> sampleOrderList = new ArrayList<SampleOrder>();
 		//查询所有未完成的版单
-		try (Transaction tx = persistence.createTransaction("ERPDB")) {
+		
+		try (Transaction tx = persistence.createTransaction("ERPDB")){
 			SqlSession sqlSession = AppBeans.get("sqlSession");
 			sampleOrderList = sqlSession.selectList("ERPDBMapper.getAllStyle");
 			tx.commit();
@@ -120,7 +126,10 @@ public class AlertCalculatorImpl extends AlertCalculator {
 		}
 		if(sampleOrderList!=null&&sampleOrderList.size()>0) {
 			alertList=alertTypeRetriever.retrieveList(sampleOrderList);
+			return alertList;
+		}else {
+			return null;
 		}
-		return alertList;
+		
 	}
 }

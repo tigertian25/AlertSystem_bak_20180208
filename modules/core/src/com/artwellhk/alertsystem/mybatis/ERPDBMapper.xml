@@ -7,6 +7,11 @@
 		<result column="NAME" property="name"/>
 		<result column="ZT_WORKING_ID" property="zt_working_id"/>
 	</resultMap>
+	<resultMap type="com.artwellhk.alertsystem.entity.SampleOrder" id="SampleOrder">
+		<id column="styleID" property="styleID"/>
+		<result column="sNumber" property="styleNumber"/>
+		<result column="xStyleNo" property="styleNo"/>
+	</resultMap>
 
 	<select id="getProcess" parameterType="java.util.Map" resultMap="ProcessMap">
 		select
@@ -26,13 +31,13 @@
 			xStyleNo,
 			xStatus
 		FROM
-			et_style
+			ERPDB.dbo.et_style
 		WHERE
 			sID NOT IN (
 				SELECT
 					TOP (10 *(1 - 1)) sID
 				FROM
-					et_style
+					ERPDB.dbo.et_style
 				WHERE
 					xStatus  <![CDATA[ < ]]> 5
 				AND xStatus <![CDATA[ >= ]]> 0
@@ -46,14 +51,14 @@
 		
 	</select>
 	<!-- 获取所有未完成的版单-->
-	<select id="getAllStyle"  resultType="Map">
+	<select id="getAllStyle"  resultMap="SampleOrder">
 		SELECT
 			
 			sID AS styleID,
 			sNumber,
 			xStyleNo
 		FROM
-			et_style
+			ERPDB.dbo.et_style
 		WHERE
 			xStatus <![CDATA[ < ]]> 5
 			AND xStatus <![CDATA[ >= ]]> 0
@@ -67,8 +72,8 @@
 			lsi.xDateTime AS 'fromTimestamp',
 			emp.xName AS 'employeeName'
 		FROM
-			lt_style_issue lsi
-			LEFT JOIN zt_empl emp ON lsi.rEmpl_ID = emp.sID
+			ERPDB.dbo.lt_style_issue lsi
+			LEFT JOIN ERPDB.dbo.zt_empl emp ON lsi.rEmpl_ID = emp.sID
 		WHERE lsi.rStyle_ID=#{styleID}
 	</select>
 	<select id="getGongYiReceive" parameterType="int" resultType="Map">
@@ -77,8 +82,8 @@
 			lsr.xDateTime AS 'fromTimestamp',
 			emp.xName AS 'employeeName'
 		FROM
-			lt_style_receive lsr
-			LEFT JOIN zt_empl emp ON lsr.rEmpl_ID = emp.sID
+			ERPDB.dbo.lt_style_receive lsr
+			LEFT JOIN ERPDB.dbo.zt_empl emp ON lsr.rEmpl_ID = emp.sID
 		WHERE lsr.rStyle_ID=#{styleID}
 	</select>
 	<select id="getHuaHuaSend" parameterType="int" resultType="Map">
@@ -87,8 +92,8 @@
 			lsi2.xDateTime AS 'fromTimestamp',
 			emp.xName AS 'employeeName'
 		FROM
-			lt_style_issue2 lsi2
-			LEFT JOIN zt_empl emp ON lsi2.rEmpl_ID = emp.sID
+			ERPDB.dbo.lt_style_issue2 lsi2
+			LEFT JOIN ERPDB.dbo.zt_empl emp ON lsi2.rEmpl_ID = emp.sID
 		WHERE lsi2.rStyle_ID=#{styleID}
 	</select>
 	<select id="getHuaHuaReceive" parameterType="int" resultType="Map">
@@ -97,8 +102,8 @@
 			lsr2.xDateTime AS 'fromTimestamp',
 			emp.xName AS 'employeeName'
 		FROM
-			lt_style_receive lsr2
-			LEFT JOIN zt_empl emp ON lsr2.rEmpl_ID = emp.sID
+			ERPDB.dbo.lt_style_receive lsr2
+			LEFT JOIN ERPDB.dbo.zt_empl emp ON lsr2.rEmpl_ID = emp.sID
 		WHERE lsr2.rStyle_ID=#{styleID}
 	</select>
 	<!-- 查询电机部及后面工序的发出记录(查询最新一条收回记录) ，if(iss.*为空){表示电机部未发出}else if(issbc.aStatus=1){是未收回}else if(issbc.aStatus=3){已收回，
@@ -115,18 +120,18 @@
 			rec.rWork_ID AS 'receiveWorkId',
 			resieveEmp.xName AS 'receiveName'
 		FROM
-			lt_issue60 iss
-		LEFT JOIN lt_issue60_bc issbc ON iss.sID = issbc.mID
-		LEFT JOIN zt_empl sendEmp ON iss.rEmpl_ID = sendEmp.sID
-		LEFT JOIN lt_receive60 rec ON issbc.aDataID = rec.sID
-		LEFT JOIN zt_empl resieveEmp ON rec.rEmpl_ID = resieveEmp.sID
+			ERPDB.dbo.lt_issue60 iss
+		LEFT JOIN ERPDB.dbo.lt_issue60_bc issbc ON iss.sID = issbc.mID
+		LEFT JOIN ERPDB.dbo.zt_empl sendEmp ON iss.rEmpl_ID = sendEmp.sID
+		LEFT JOIN ERPDB.dbo.lt_receive60 rec ON issbc.aDataID = rec.sID
+		LEFT JOIN ERPDB.dbo.zt_empl resieveEmp ON rec.rEmpl_ID = resieveEmp.sID
 		WHERE
 			issbc.xBC LIKE CAST (
 				(
 					SELECT
 						card.xCard
 					FROM
-						pt_card card
+						ERPDB.dbo.pt_card card
 					WHERE
 						card.rStyle_ID = #{styleID}
 				) AS VARCHAR

@@ -1,4 +1,4 @@
-package com.artwellhk.alertsystem.core;
+package com.artwellhk.alertsystem.entity;
 
 import java.io.Serializable;
 

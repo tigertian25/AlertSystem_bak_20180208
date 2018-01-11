@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import com.artwellhk.alertsystem.entity.AlertSnooze;
 import com.artwellhk.alertsystem.entity.AlertTypeID;
+import com.artwellhk.alertsystem.service.SnoozeAccessorService;
+import com.artwellhk.alertsystem.service.SnoozeAccessorServiceBean;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -16,10 +18,10 @@ public class SnoozeAccessorImplTest {
 	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	private Logger log = LoggerFactory.getLogger(SnoozeAccessorImplTest.class);
 	
-	SnoozeAccessorImpl SnoozeAccessor;
+	SnoozeAccessorService SnoozeAccessor;
 	@Test
 	public void testGetSnooze() {
-		SnoozeAccessor=new SnoozeAccessorImpl();
+		SnoozeAccessor=new SnoozeAccessorServiceBean();
 		AlertSnooze alertSnooze = SnoozeAccessor.getSnooze(1, 1);
 		  String alertSnoozeString=gson.toJson(alertSnooze);
 		  log.debug("AlertSnooze查询："+alertSnoozeString);
@@ -27,7 +29,7 @@ public class SnoozeAccessorImplTest {
 
 	@Test
 	public void testInsert() {
-		SnoozeAccessor=new SnoozeAccessorImpl();
+		SnoozeAccessor=new SnoozeAccessorServiceBean();
 		String result=SnoozeAccessor.insert(1, 1,30*60);
 		 log.debug("SnoozeAccessor新增："+result);
 	}

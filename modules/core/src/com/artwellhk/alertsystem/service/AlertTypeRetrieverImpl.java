@@ -1,4 +1,4 @@
-package com.artwellhk.alertsystem.core.impl;
+package com.artwellhk.alertsystem.service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,14 +12,16 @@ import javax.persistence.NoResultException;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import com.artwellhk.alertsystem.core.Alert;
-import com.artwellhk.alertsystem.core.AlertTypeRetriever;
-import com.artwellhk.alertsystem.core.SampleOrder;
 import com.artwellhk.alertsystem.core.util;
+import com.artwellhk.alertsystem.entity.Alert;
 import com.artwellhk.alertsystem.entity.AlertType;
 import com.artwellhk.alertsystem.entity.AlertTypeID;
 import com.artwellhk.alertsystem.entity.Process;
+import com.artwellhk.alertsystem.entity.SampleOrder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
@@ -27,6 +29,7 @@ import com.haulmont.cuba.core.global.AppBeans;
 
 @Component(AlertTypeRetriever.NAME)
 public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
+	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	@Inject
 	private Persistence persistence;
 
@@ -34,56 +37,76 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 	public List<Alert> retrieveList(List<SampleOrder> sampleOrderList) {
 		List<Alert> alertList = new ArrayList<Alert>();
 		if (sampleOrderList.size() > 0) {
-			Map<String, Object> map = new HashMap<>();//存放临时数据
-			Map<String, Object> parameter=new HashMap<>();
-			
+			// 存放临时数据
+			Map<String, Object> parameter = new HashMap<>();
+			Object obj = null;// 当前工序
+			Object objNext = null;// 下一工序
 			// 循环sampleOrderList
 			for (SampleOrder sampleOrder : sampleOrderList) {
-
 				// 工艺未发出
-				map =null;
-				parameter=null;
+				obj = null;
+
+				parameter.clear();
+//				parameter.put("styleID", 531410628);
 				parameter.put("styleID", sampleOrder.getStyleID());
-				map = (Map<String, Object>) selectOneMapByOParameter("ERPDBMapper.getGongYiSend", parameter, "ERPDB");
-				if (map.isEmpty() || map == null) {
-					alertList.add(calculatorAlert(sampleOrder,map,AlertTypeID.GongYiNoSend.getId()));
+
+				objNext = selectOneMapByOParameter("ERPDBMapper.getGongYiSend", parameter);
+				if (objNext == null) {
+					alertList.add(calculatorAlert(sampleOrder, null, AlertTypeID.GongYiNoSend.getId()));
 					continue;
 				}
 				// 工艺未收回
-				map =null;
-				map = (Map<String, Object>) selectOneMapByOParameter("ERPDBMapper.getGongYiReceive", parameter, "ERPDB");
-				if (map.isEmpty() || map == null) {
-					alertList.add(calculatorAlert(sampleOrder,map,AlertTypeID.GongYiNoReceive.getId()));
+				obj = objNext;
+				objNext = selectOneMapByOParameter("ERPDBMapper.getGongYiReceive", parameter);
+				if (objNext == null) {
+					alertList.add(calculatorAlert(sampleOrder, (Map<String, Object>) obj,
+							AlertTypeID.GongYiNoReceive.getId()));
 					continue;
 				}
 				// 画花未发出
-				map =null;
-				map = (Map<String, Object>) selectOneMapByOParameter("ERPDBMapper.getHuaHuaSend", parameter, "ERPDB");
-				if (map.isEmpty() || map == null) {
-					alertList.add(calculatorAlert(sampleOrder,map,AlertTypeID.HuaHuaNoSend.getId()));
+				obj = objNext;
+				objNext = selectOneMapByOParameter("ERPDBMapper.getHuaHuaSend", parameter);
+				if (objNext == null) {
+					alertList.add(
+							calculatorAlert(sampleOrder, (Map<String, Object>) obj, AlertTypeID.HuaHuaNoSend.getId()));
 					continue;
 				}
 				// 判断是否画花收回
-				map =null;
-				map = (Map<String, Object>) selectOneMapByOParameter("ERPDBMapper.getHuaHuaReceive", parameter, "ERPDB");
-				if (map.isEmpty() || map == null) {
-					alertList.add(calculatorAlert(sampleOrder,map,AlertTypeID.HuaHuaNoReceive.getId()));
+				obj = objNext;
+				objNext = selectOneMapByOParameter("ERPDBMapper.getHuaHuaReceive", parameter);
+				if (objNext == null) {
+					alertList.add(calculatorAlert(sampleOrder, (Map<String, Object>) obj,
+							AlertTypeID.HuaHuaNoReceive.getId()));
 					continue;
 				}
 				// 判断是否电机发出
-				/**查询电机部及后面工序的发出记录(查询最新一条收回记录) ，if(iss.*为空){表示电机部未发出}else if(issbc.aStatus=1){是未收回}else if(issbc.aStatus=3){已收回，
-					if(收回的工序不是最后工序){返回收回时间}}*/
-				map =null;
-				map = (Map<String, Object>) selectOneMapByOParameter("ERPDBMapper.getIssue60ByStyleID", parameter, "ERPDB");
-				if (map.isEmpty() || map == null) {//电机未发出
-					alertList.add(calculatorAlert(sampleOrder,map,AlertTypeID.DianJiNoSend.getId()));
+				/**
+				 * 查询电机部及后面工序的发出记录(查询最新一条收回记录) ，if(iss.*为空){表示电机部未发出}else
+				 * if(issbc.aStatus=1){是未收回}else if(issbc.aStatus=3){已收回，
+				 * if(收回的工序不是最后工序){返回收回时间}}
+				 */
+				obj = objNext;
+				objNext = selectOneMapByOParameter("ERPDBMapper.getIssue60ByStyleID", parameter);
+				if (objNext == null) {// 电机未发出
+					alertList.add(
+							calculatorAlert(sampleOrder, (Map<String, Object>) obj, AlertTypeID.DianJiNoSend.getId()));
 					continue;
-				}else {
-					if("1".equals(map.get("aStatus").toString())) {//aStatus=1表示当前工序发出未收回
-						//判断当前工序是什么
-						parameter.put("ztWorkingId", map.get("sendWorkId"));
-						Process process=(Process) selectOneMapByOParameter("ERPDBMapper.getProcess", parameter, null);
-						
+				} else {
+					Map<String, Object> map = (Map<String, Object>) obj;// 当前工序
+					Process process = new Process();
+					try (Transaction tx = persistence.createTransaction()) {
+						EntityManager em = persistence.getEntityManager();
+						process = (Process) em.createQuery(
+										"select o from alertsystem$Process o where o.zt_working_id = :zt_working_id")
+								.setParameter("zt_working_id", map.get("sendWorkId")).getSingleResult();
+						tx.commit();
+					} catch (NoResultException e) {
+						e.printStackTrace();
+						return null;
+					}
+					if ("1".equals(map.get("aStatus").toString())) {// aStatus=1表示当前工序发出未收回
+
+						// 判断当前工序是什么
 						AlertType alertType = new AlertType();
 						try (Transaction tx = persistence.createTransaction()) {
 							EntityManager em = persistence.getEntityManager();
@@ -95,27 +118,26 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 						} catch (NoResultException e) {
 							return null;
 						}
-						Alert alert=new Alert(alertType, util.stringToDate(map.get("sendTime").toString()), sampleOrder,map.get("sendEmployee").toString());
+						Alert alert = new Alert(alertType, util.stringToDate(map.get("sendTime").toString()),
+								sampleOrder, map.get("sendEmployee").toString());
 						alertList.add(alert);
 						continue;
 					}
-					if("3".equals(map.get("aStatus").toString())) {//aStatus=3表示当前工序已收回，下一工序未发出
-						//判断当前工序是否未最后工序
-						parameter.put("ztWorkingId", map.get("receiveWorkId"));
-						Process process=(Process) selectOneMapByOParameter("ERPDBMapper.getProcess", parameter, null);//收回的工序
+					if ("3".equals(map.get("aStatus").toString())) {// aStatus=3表示当前工序已收回，下一工序未发出
+						// 判断当前工序是否未最后工序
 						AlertType alertType = new AlertType();
 						try (Transaction tx = persistence.createTransaction()) {
 							EntityManager em = persistence.getEntityManager();
 							alertType = (AlertType) em.createQuery(
 									"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t "
 											+ "  order by a.id desc")
-									.getFirstResult();//获取最后一个alertType
+									.getFirstResult();// 获取最后一个alertType
 							tx.commit();
 						} catch (NoResultException e) {
 							return null;
 						}
-						//比较最后一个alertType的收回工序与当前收回工序是否相等
-						if(alertType.getToProcess().getId()!=process.getId()) {//表示当前工序不是最后工序
+						// 比较最后一个alertType的收回工序与当前收回工序是否相等
+						if (alertType.getFromProcess().getId() != process.getId()) {// 表示当前工序不是最后工序
 							try (Transaction tx = persistence.createTransaction()) {
 								EntityManager em = persistence.getEntityManager();
 								alertType = (AlertType) em.createQuery(
@@ -126,7 +148,8 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 							} catch (NoResultException e) {
 								return null;
 							}
-							Alert alert=new Alert(alertType, util.stringToDate(map.get("receiveTime").toString()), sampleOrder,map.get("receiveName").toString());
+							Alert alert = new Alert(alertType, util.stringToDate(map.get("receiveTime").toString()),
+									sampleOrder, map.get("receiveName").toString());
 							alertList.add(alert);
 						}
 					}
@@ -186,13 +209,13 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 					alertList.add(pingCheReceive(sampleOrder));
 					continue;
 				}
-
 			}
 		}
+		
 		return alertList;
 	}
 
-	private Alert calculatorAlert(SampleOrder sampleOrder, Map<String, Object> map,int alertTypeID) {
+	private Alert calculatorAlert(SampleOrder sampleOrder, Map<String, Object> map, int alertTypeID) {
 		AlertType alertType = new AlertType();
 		try (Transaction tx = persistence.createTransaction()) {
 			EntityManager em = persistence.getEntityManager();
@@ -204,7 +227,14 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 		} catch (NoResultException e) {
 			return null;
 		}
-		Alert alert = new Alert(alertType, util.stringToDate(map.get("fromTimestamp").toString()), sampleOrder,map.get("employeeName").toString());
+		Alert alert = new Alert();
+		if (map != null) {
+			alert = new Alert(alertType, util.stringToDate(map.get("fromTimestamp").toString()), sampleOrder,
+					map.get("employeeName").toString());
+		}else {
+			alert = new Alert(alertType, sampleOrder);
+		}
+		//System.out.println(gson.toJson(alert));
 		return alert;
 	}
 
@@ -213,22 +243,21 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 	 * @param sqlname:mybatis的Mapper中对应的sql的名称（namespace。id）
 	 * @param obj:参数值
 	 * @param db：需要查询的数据库名，默认数据库传空值
-	 * @return：返回Map<String,Object>
+	 * @return：返回Object类型
 	 */
-	public Object selectOneMapByOParameter(String sqlname, Map<String, Object> parameter, String db) {
+	public Object selectOneMapByOParameter(String sqlname, Map<String, Object> parameter) {
 		Object obj = null;
-		Transaction tx = null;
-		if (!db.equals("") && db != null) {
-			tx = persistence.createTransaction(db);
-		} else {
-			tx = persistence.createTransaction();
-		}
+		
+		Transaction tx = persistence.createTransaction("ERPDB");
 		try {
 			SqlSession sqlSession = AppBeans.get("sqlSession");
-			obj  = sqlSession.selectOne(sqlname, parameter);
+			obj = sqlSession.selectOne(sqlname, parameter);
 			tx.commit();
+
 		} catch (NoResultException e) {
 			return null;
+		}finally {
+			  tx.end();
 		}
 		return obj;
 	}

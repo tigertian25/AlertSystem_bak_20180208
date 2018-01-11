@@ -20,7 +20,7 @@
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 	
-	<!-- <bean id="cubaDataSource_ERPDB" class="com.haulmont.cuba.core.sys.CubaJndiObjectFactoryBean">
+	<bean id="cubaDataSource_ERPDB" class="com.haulmont.cuba.core.sys.CubaJndiObjectFactoryBean">
 		<property name="jndiNameAppProperty" value="cuba.dataSourceJndiName_ERPDB" />
 		<property name="resourceRef" value="true" />
 	</bean>
@@ -36,5 +36,5 @@
 		<property name="dataSource" ref="cubaDataSource_ERPDB" />
 		<qualifier type="org.springframework.beans.factory.annotation.Qualifier"
 			value="ERPDB" />
-	</bean> -->
+	</bean>
 </beans>

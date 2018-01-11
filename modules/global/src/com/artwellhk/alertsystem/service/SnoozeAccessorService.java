@@ -1,8 +1,8 @@
-package com.artwellhk.alertsystem.core;
+package com.artwellhk.alertsystem.service;
 
 import com.artwellhk.alertsystem.entity.AlertSnooze;
 
-public abstract class SnoozeAccessor {
+public interface SnoozeAccessorService {
 	public static final String NAME = "SnoozeAccessor";
 	public abstract AlertSnooze getSnooze(int sampleOrderId,int alertTypeId);
 	public abstract String insert(int sampleOrderId,int alertTypeId,int duration);
