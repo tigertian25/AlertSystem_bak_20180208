@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <menu id="application-alertsystem" insertBefore="administration">
+    <menu id="application-alertsystem"
+          insertBefore="administration">
+        <item screen="alertsystem$Process.browse"/>
+        <item screen="alertsystem$AlertType.browse"/>
+        <item screen="alertList"/>
     </menu>
 </menu-config>

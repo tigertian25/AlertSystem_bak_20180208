@@ -9,7 +9,9 @@ import com.haulmont.cuba.core.entity.HasUuid;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import com.haulmont.chile.core.annotations.NamePattern;
 
+@NamePattern("%s %s %s %s %s|fromProcess,fromProcessType,toProcess,toProcessType,allowedDuration")
 @Table(name = "ALERTSYSTEM_ALERT_TYPE")
 @Entity(name = "alertsystem$AlertType")
 public class AlertType extends BaseIntegerIdEntity {
@@ -38,6 +40,24 @@ public class AlertType extends BaseIntegerIdEntity {
     @Column(name = "TOTAL_MAX_DURATION")
     protected Integer totalMaxDuration;
 
+    public ProcessType getToProcessType() {
+        return toProcessType == null ? null : ProcessType.fromId(toProcessType);
+    }
+
+    public void setToProcessType(ProcessType toProcessType) {
+        this.toProcessType = toProcessType == null ? null : toProcessType.getId();
+    }
+
+
+    public ProcessType getFromProcessType() {
+        return fromProcessType == null ? null : ProcessType.fromId(fromProcessType);
+    }
+
+    public void setFromProcessType(ProcessType fromProcessType) {
+        this.fromProcessType = fromProcessType == null ? null : fromProcessType.getId();
+    }
+
+
     public void setFromProcess(Process fromProcess) {
         this.fromProcess = fromProcess;
     }
@@ -54,22 +74,6 @@ public class AlertType extends BaseIntegerIdEntity {
         return toProcess;
     }
 
-
-    public void setFromProcessType(Integer fromProcessType) {
-        this.fromProcessType = fromProcessType;
-    }
-
-    public Integer getFromProcessType() {
-        return fromProcessType;
-    }
-
-    public void setToProcessType(Integer toProcessType) {
-        this.toProcessType = toProcessType;
-    }
-
-    public Integer getToProcessType() {
-        return toProcessType;
-    }
 
 
 

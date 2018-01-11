@@ -4,7 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import com.haulmont.cuba.core.entity.BaseIntegerIdEntity;
 import javax.persistence.Column;
+import com.haulmont.chile.core.annotations.NamePattern;
 
+@NamePattern("%s|name")
 @Table(name = "ALERTSYSTEM_PROCESS")
 @Entity(name = "alertsystem$Process")
 public class Process extends BaseIntegerIdEntity {
