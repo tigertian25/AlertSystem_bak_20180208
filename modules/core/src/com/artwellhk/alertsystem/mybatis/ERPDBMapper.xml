@@ -8,7 +8,7 @@
 		<result column="ZT_WORKING_ID" property="zt_working_id"/>
 	</resultMap>
 	<resultMap type="com.artwellhk.alertsystem.entity.SampleOrder" id="SampleOrder">
-		<id column="styleID" property="styleID"/>
+		<id column="styleID" property="id"/>
 		<result column="sNumber" property="styleNumber"/>
 		<result column="xStyleNo" property="styleNo"/>
 	</resultMap>

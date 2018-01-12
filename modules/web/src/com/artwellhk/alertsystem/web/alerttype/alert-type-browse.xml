@@ -60,9 +60,11 @@
                         <action id="remove"/>
                     </actions>
                     <columns>
-                        <column id="fromProcess"/>
+                        <column id="fromProcess"
+                                caption="fromProcess"/>
                         <column id="fromProcessType"/>
-                        <column id="toProcess"/>
+                        <column id="toProcess"
+                                caption="fromProcess"/>
                         <column id="toProcessType"/>
                         <column id="allowedDuration"/>
                         <column id="singleMaxDuration"/>

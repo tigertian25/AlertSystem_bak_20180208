@@ -5,6 +5,6 @@
             template="com/artwellhk/alertsystem/web/process/process-browse.xml"/>
     <screen id="alertsystem$AlertType.browse"
             template="com/artwellhk/alertsystem/web/alerttype/alert-type-browse.xml"/>
-    <screen id="alertList"
-            template="com/artwellhk/alertsystem/web/alertList/alertList.xml"/>
+    <screen id="alertsystem$Alert.browse"
+            template="com/artwellhk/alertsystem/web/alert/alert-browse.xml"/>
 </screen-config>

@@ -48,7 +48,7 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 
 				parameter.clear();
 //				parameter.put("styleID", 531410628);
-				parameter.put("styleID", sampleOrder.getStyleID());
+				parameter.put("styleID", sampleOrder.getId());
 
 				objNext = selectOneMapByOParameter("ERPDBMapper.getGongYiSend", parameter);
 				if (objNext == null) {

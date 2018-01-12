@@ -1,55 +1,46 @@
 package com.artwellhk.alertsystem.entity;
 
-import java.io.Serializable;
+import com.haulmont.chile.core.annotations.MetaClass;
+import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.cuba.core.entity.BaseIntegerIdEntity;
+import com.haulmont.chile.core.annotations.NamePattern;
 
-import org.springframework.stereotype.Component;
+@NamePattern("%s %s %s|id,styleNo,styleNumber")
+@MetaClass(name = "alertsystem$SampleOrder")
+public class SampleOrder extends BaseIntegerIdEntity {
+    private static final long serialVersionUID = -7648971970972141497L;
 
-@Component(SampleOrder.NAME)
-public class SampleOrder implements Serializable {
-	public static final String NAME = "SampleOrder";
+    @MetaProperty
+    protected String styleNumber;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private int styleID;
-	private String styleNumber;
-	private String styleNo;
+    @MetaProperty
+    protected String styleNo;
 
-	public String getStyleNo() {
-		return styleNo;
-	}
+    public void setStyleNumber(String styleNumber) {
+        this.styleNumber = styleNumber;
+    }
 
-	public void setStyleNo(String styleNo) {
-		this.styleNo = styleNo;
-	}
+    public String getStyleNumber() {
+        return styleNumber;
+    }
 
-	public int getStyleID() {
-		return styleID;
-	}
+    public void setStyleNo(String styleNo) {
+        this.styleNo = styleNo;
+    }
 
-	public void setStyleID(int styleID) {
-		this.styleID = styleID;
-	}
-
-	public String getStyleNumber() {
-		return styleNumber;
-	}
-
-	public void setStyleNumber(String styleNumber) {
-		this.styleNumber = styleNumber;
-	}
-	public SampleOrder() {}
+    public String getStyleNo() {
+        return styleNo;
+    }
+    public SampleOrder() {}
 	public SampleOrder(int styleID, String styleNumber,String styleNo) {
-		this.styleID = styleID;
+		this.id = styleID;
 		this.styleNumber = styleNumber;
 		this.styleNo=styleNo;
 	}
 
 	@Override
 	public String toString() {
-		return "SampleOrder{" + "styleID='" + styleID + '\'' + ", styleNumber=" + styleNumber + '}';
+		return "SampleOrder{" + "styleID='" + id + '\'' + ", styleNumber=" + styleNumber + '}';
 	}
 
 }

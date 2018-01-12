@@ -79,7 +79,7 @@ public class AlertServiceBean implements AlertService {
 					Date lastTimestamp = DateUtils.addSeconds(fromTimestamp, allowedDuration);//规定完成时间
 					alert.setLastTimestamp(lastTimestamp);
 					if (now.getTime() > lastTimestamp.getTime()) {// 当前时间大于规定时间表示超时
-						AlertSnooze alertSnooze = snoozeAccessor.getSnooze(alert.getSampleOrder().getStyleID(),
+						AlertSnooze alertSnooze = snoozeAccessor.getSnooze(alert.getSampleOrder().getId(),
 								alert.getAlertType().getId());
 
 						if ( alertSnooze != null&&alertSnooze.getId()>0) {// 设置了睡眠
@@ -108,6 +108,7 @@ public class AlertServiceBean implements AlertService {
 				}
 			}
 		}
+		System.out.println(gson.toJson(returnAlertList));
 		return returnAlertList;
 
 	}
