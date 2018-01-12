@@ -11,10 +11,6 @@
                          class="com.artwellhk.alertsystem.entity.Alert"
                          datasourceClass="com.artwellhk.alertsystem.web.myDatasource.AlertListDatasource"
                          refreshMode="NEVER"/>
-        <datasource id="alertTypeDs"
-                    allowCommit="false"
-                    class="com.artwellhk.alertsystem.entity.AlertType"
-                    view="alertType-view"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
