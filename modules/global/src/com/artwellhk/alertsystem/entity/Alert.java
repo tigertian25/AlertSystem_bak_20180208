@@ -13,7 +13,7 @@ import com.haulmont.cuba.core.entity.HasUuid;
 
 @NamePattern("%s %s %s %s %s %s|sampleOrder,alertType,employeeName,fromTimestamp,lastTimestamp,timeDifference")
 @MetaClass(name = "alertsystem$Alert")
-public class Alert extends BaseIntegerIdEntity implements HasUuid {
+public class Alert extends BaseIntegerIdEntity {
     private static final long serialVersionUID = 4543700162506865893L;
 
     @NotNull
@@ -34,17 +34,6 @@ public class Alert extends BaseIntegerIdEntity implements HasUuid {
 
     @MetaProperty
     protected String employeeName;
-
-    @MetaProperty
-    protected UUID uuid;
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
 
 
     public void setSampleOrder(SampleOrder sampleOrder) {
@@ -97,7 +86,7 @@ public class Alert extends BaseIntegerIdEntity implements HasUuid {
     public Date getFromTimestamp() {
         return fromTimestamp;
     }
-public Alert() {}
+    public Alert() {}
 	
 	public Alert(AlertType alertType,Date fromTimestamp,SampleOrder sampleOrder,String employeeName) {
 		this.alertType=alertType;this.fromTimestamp=fromTimestamp;this.sampleOrder=sampleOrder;this.employeeName=employeeName;

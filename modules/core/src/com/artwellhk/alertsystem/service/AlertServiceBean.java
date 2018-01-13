@@ -30,7 +30,7 @@ public class AlertServiceBean implements AlertService {
 	@Inject
 	private Persistence persistence;
 	@Inject
-	private AlertTypeRetriever alertTypeRetriever;
+	private AlertTypeRetrieverService alertTypeRetriever;
 	@Inject
 	private SnoozeAccessorService snoozeAccessor;
 
@@ -48,8 +48,10 @@ public class AlertServiceBean implements AlertService {
 
 	@Override
 	public List<Alert> calculateAlertList() {
+		System.out.println("enter calculateAlertList!!!!!!!!!! ");
 		List<Alert> returnAlertList = new ArrayList<Alert>();
 		List<Alert> alertList = getAlertList();
+		
 		if (alertList.size() > 0) {
 //			for (Alert alert : alertList) {
 //				if (isOverTime()) {// 是否超时
@@ -66,7 +68,6 @@ public class AlertServiceBean implements AlertService {
 			for (Alert alert : alertList) {// 循环计算超时的数据
 				try {
 					if(("").equals(alert.getFromTimestamp())||null==alert.getFromTimestamp()) {//工艺未发出
-						System.out.println(gson.toJson(alert));
 						returnAlertList.add(alert);
 						continue;
 					}
@@ -106,9 +107,9 @@ public class AlertServiceBean implements AlertService {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				//System.out.println("returnAlertList--"+gson.toJson(returnAlertList));
 			}
 		}
-		System.out.println(gson.toJson(returnAlertList));
 		return returnAlertList;
 
 	}
@@ -116,17 +117,20 @@ public class AlertServiceBean implements AlertService {
 	protected List<Alert> getAlertList() {
 		List<Alert> alertList = new ArrayList<Alert>();
 		List<SampleOrder> sampleOrderList = new ArrayList<SampleOrder>();
-		//查询所有未完成的版单
-		
+		//查询所有未完成且工艺发出未收回的版单
+		System.out.println("select style star-----"+new Date());
 		try (Transaction tx = persistence.createTransaction("ERPDB")){
 			SqlSession sqlSession = AppBeans.get("sqlSession");
-			sampleOrderList = sqlSession.selectList("ERPDBMapper.getAllStyle");
+			sampleOrderList = sqlSession.selectList("ERPDBMapper.getAllStyleOfGOngYiSend");
 			tx.commit();
 		} catch (NoResultException e) {
 			return null;
 		}
+		System.out.println("select style end-----"+new Date());
 		if(sampleOrderList!=null&&sampleOrderList.size()>0) {
+			System.out.println("star alertTypeRetriever-----"+new Date());
 			alertList=alertTypeRetriever.retrieveList(sampleOrderList);
+			System.out.println("end alertTypeRetriever-----"+new Date());
 			return alertList;
 		}else {
 			return null;

@@ -13,11 +13,11 @@ import com.artwellhk.alertsystem.entity.Alert;
 import com.artwellhk.alertsystem.entity.AlertType;
 import com.artwellhk.alertsystem.entity.Process;
 import com.artwellhk.alertsystem.entity.SampleOrder;
-import com.artwellhk.alertsystem.service.AlertTypeRetrieverImpl;
+import com.artwellhk.alertsystem.service.AlertTypeRetrieverBean;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class AlertTypeRetrieverImplTest extends AlertTypeRetrieverImpl {
+public class AlertTypeRetrieverImplTest extends AlertTypeRetrieverBean {
 	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	private Logger log = LoggerFactory.getLogger(AlertTypeRetrieverImplTest.class);
 

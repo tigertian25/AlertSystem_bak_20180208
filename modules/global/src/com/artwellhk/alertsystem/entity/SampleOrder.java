@@ -4,6 +4,7 @@ import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.BaseIntegerIdEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+import java.util.Date;
 
 @NamePattern("%s %s %s|id,styleNo,styleNumber")
 @MetaClass(name = "alertsystem$SampleOrder")
@@ -15,6 +16,54 @@ public class SampleOrder extends BaseIntegerIdEntity {
 
     @MetaProperty
     protected String styleNo;
+
+    @MetaProperty
+    protected Integer isReceive;
+
+    @MetaProperty
+    protected String gongYiSendEmpl;
+
+    @MetaProperty
+    protected String gonYiSendTime;
+
+    @MetaProperty
+    protected String gongYiReceiveTime;
+
+    public void setGongYiReceiveTime(String gongYiReceiveTime) {
+        this.gongYiReceiveTime = gongYiReceiveTime;
+    }
+
+    public String getGongYiReceiveTime() {
+        return gongYiReceiveTime;
+    }
+
+
+    public String getGonYiSendTime() {
+        return gonYiSendTime;
+    }
+
+    public void setGonYiSendTime(String gonYiSendTime) {
+        this.gonYiSendTime = gonYiSendTime;
+    }
+
+
+    public void setGongYiSendEmpl(String gongYiSendEmpl) {
+        this.gongYiSendEmpl = gongYiSendEmpl;
+    }
+
+    public String getGongYiSendEmpl() {
+        return gongYiSendEmpl;
+    }
+
+
+    public void setIsReceive(Integer isReceive) {
+        this.isReceive = isReceive;
+    }
+
+    public Integer getIsReceive() {
+        return isReceive;
+    }
+
 
     public void setStyleNumber(String styleNumber) {
         this.styleNumber = styleNumber;

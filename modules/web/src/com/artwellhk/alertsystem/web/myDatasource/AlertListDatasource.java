@@ -9,13 +9,15 @@ import com.haulmont.cuba.gui.data.impl.CustomGroupDatasource;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 
 public class AlertListDatasource extends CustomGroupDatasource<Alert, Integer> {
-
-	 private AlertService someService = AppBeans.get(AlertService.NAME);
+@Inject
+	  AlertService alertService = AppBeans.get(AlertService.NAME);
 
 	    @Override
 	    protected Collection<Alert> getEntities(Map<String, Object> params) {
-	        return someService.calculateAlertList();
+	        return alertService.calculateAlertList();
 	    }
 }

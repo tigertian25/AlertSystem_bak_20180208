@@ -13,13 +13,8 @@ import com.haulmont.cuba.gui.data.impl.CustomGroupDatasource;
 
 public class AlertBrowse extends AbstractLookup {
 	
-	@Override
+	/*@Override
 	public void init(Map<String, Object> params) {
-		/*GroupDatasource ds = new DsBuilder(getDsContext())
-		        .setJavaClass(Alert.class)
-		        .setDsClass(AlertListDatasource.class)
-		        .setId("alertsDs")
-		        .buildGroupDatasource();*/
-		new AlertListDatasource();
-	}
+		super.init(params);
+	}*/
 }

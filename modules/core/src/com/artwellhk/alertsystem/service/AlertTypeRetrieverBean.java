@@ -27,8 +27,8 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.AppBeans;
 
-@Component(AlertTypeRetriever.NAME)
-public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
+@Service(AlertTypeRetrieverService.NAME)
+public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	@Inject
 	private Persistence persistence;
@@ -50,25 +50,19 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 //				parameter.put("styleID", 531410628);
 				parameter.put("styleID", sampleOrder.getId());
 
-				objNext = selectOneMapByOParameter("ERPDBMapper.getGongYiSend", parameter);
-				if (objNext == null) {
-					alertList.add(calculatorAlert(sampleOrder, null, AlertTypeID.GongYiNoSend.getId()));
-					continue;
-				}
+				
 				// 工艺未收回
-				obj = objNext;
-				objNext = selectOneMapByOParameter("ERPDBMapper.getGongYiReceive", parameter);
-				if (objNext == null) {
-					alertList.add(calculatorAlert(sampleOrder, (Map<String, Object>) obj,
-							AlertTypeID.GongYiNoReceive.getId()));
+				if (sampleOrder.getIsReceive() == 1) {
+					alertList.add(calculatorAlert(sampleOrder, null,
+							AlertTypeID.GongYiNoReceive.getId(),1));
 					continue;
 				}
 				// 画花未发出
-				obj = objNext;
+				//obj = objNext;
 				objNext = selectOneMapByOParameter("ERPDBMapper.getHuaHuaSend", parameter);
 				if (objNext == null) {
 					alertList.add(
-							calculatorAlert(sampleOrder, (Map<String, Object>) obj, AlertTypeID.HuaHuaNoSend.getId()));
+							calculatorAlert(sampleOrder, null, AlertTypeID.HuaHuaNoSend.getId(),2));
 					continue;
 				}
 				// 判断是否画花收回
@@ -76,7 +70,7 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 				objNext = selectOneMapByOParameter("ERPDBMapper.getHuaHuaReceive", parameter);
 				if (objNext == null) {
 					alertList.add(calculatorAlert(sampleOrder, (Map<String, Object>) obj,
-							AlertTypeID.HuaHuaNoReceive.getId()));
+							AlertTypeID.HuaHuaNoReceive.getId(),3));
 					continue;
 				}
 				// 判断是否电机发出
@@ -89,7 +83,7 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 				objNext = selectOneMapByOParameter("ERPDBMapper.getIssue60ByStyleID", parameter);
 				if (objNext == null) {// 电机未发出
 					alertList.add(
-							calculatorAlert(sampleOrder, (Map<String, Object>) obj, AlertTypeID.DianJiNoSend.getId()));
+							calculatorAlert(sampleOrder, (Map<String, Object>) obj, AlertTypeID.DianJiNoSend.getId(),3));
 					continue;
 				} else {
 					Map<String, Object> map = (Map<String, Object>) obj;// 当前工序
@@ -151,71 +145,19 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 							Alert alert = new Alert(alertType, util.stringToDate(map.get("receiveTime").toString()),
 									sampleOrder, map.get("receiveName").toString());
 							alertList.add(alert);
+							continue;
 						}
 					}
 				}
-				// 判断是否电机收回
-				if (!isDianJiReceive()) {
-					alertList.add(dianJiReceive(sampleOrder));
-					continue;
-				}
-				// 判断是否套口发出
-				if (!isTaoKouSend()) {
-					alertList.add(taoKouSend(sampleOrder));
-					continue;
-				}
-				// 判断是否套口收回
-				if (!isTaoKouReceive()) {
-					alertList.add(taoKouReceive(sampleOrder));
-					continue;
-				}
-				// 判断是否手缝发出
-				if (!isShouFengSend()) {
-					alertList.add(shouFengSend(sampleOrder));
-					continue;
-				}
-				// 判断是否手缝收回
-				if (!isShouFengReceive()) {
-					alertList.add(shouFengReceive(sampleOrder));
-					continue;
-				}
-				// 判断是否洗水发出
-				if (!isXiShuiSend()) {
-					alertList.add(xiShuiSend(sampleOrder));
-					continue;
-				}
-				// 判断是否洗水收回
-				if (!isXiShuiReceive()) {
-					alertList.add(xiShuiReceive(sampleOrder));
-					continue;
-				}
-				// 判断是否烫衣发出
-				if (!isTangYiSend()) {
-					alertList.add(tangYiSend(sampleOrder));
-					continue;
-				}
-				// 判断是否烫衣收回
-				if (!isTangYiReceive()) {
-					alertList.add(tangYiReceive(sampleOrder));
-					continue;
-				}
-				// 判断是否平车发出
-				if (!isPingCheSend()) {
-					alertList.add(pingCheSend(sampleOrder));
-					continue;
-				}
-				// 判断是否平车收回
-				if (!isPingCheReceive()) {
-					alertList.add(pingCheReceive(sampleOrder));
-					continue;
-				}
+				
 			}
 		}
-		
 		return alertList;
 	}
-
-	private Alert calculatorAlert(SampleOrder sampleOrder, Map<String, Object> map, int alertTypeID) {
+/*
+ * dataType:1工艺未收回，2画花未发出，3其他
+ */
+	private Alert calculatorAlert(SampleOrder sampleOrder, Map<String, Object> map, int alertTypeID,int dataType) {
 		AlertType alertType = new AlertType();
 		try (Transaction tx = persistence.createTransaction()) {
 			EntityManager em = persistence.getEntityManager();
@@ -228,11 +170,17 @@ public class AlertTypeRetrieverImpl implements AlertTypeRetriever {
 			return null;
 		}
 		Alert alert = new Alert();
-		if (map != null) {
-			alert = new Alert(alertType, util.stringToDate(map.get("fromTimestamp").toString()), sampleOrder,
-					map.get("employeeName").toString());
+		if(dataType==1) {//工艺未收回
+			alert = new Alert(alertType,sampleOrder);
+			alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
+			alert.setFromTimestamp(util.stringToDate(sampleOrder.getGonYiSendTime()));
+		}else if(dataType==2) {//画花未发出
+			alert = new Alert(alertType,sampleOrder);
+			alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
+			alert.setFromTimestamp(util.stringToDate(sampleOrder.getGongYiReceiveTime()));
 		}else {
-			alert = new Alert(alertType, sampleOrder);
+		alert = new Alert(alertType, util.stringToDate(map.get("fromTimestamp").toString()), sampleOrder,
+					map.get("employeeName").toString());
 		}
 		//System.out.println(gson.toJson(alert));
 		return alert;

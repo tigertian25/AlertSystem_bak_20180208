@@ -16,6 +16,9 @@
                 <entry key="SnoozeAccessor"
                        value="com.artwellhk.alertsystem.service.SnoozeAccessorService"/>
                
+                <entry key="alertsystem_AlertTypeRetrieverService"
+                       value="com.artwellhk.alertsystem.service.AlertTypeRetrieverService"/>
+               
             </map>
         </property>
     </bean>

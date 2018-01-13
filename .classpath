@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" path="/AlertSystem-web" kind="src"/>
+	<classpathentry exported="true" path="/AlertSystem-portal" kind="src"/>
 	<classpathentry exported="true" path="/AlertSystem-gui" kind="src"/>
 	<classpathentry exported="true" path="/AlertSystem-global" kind="src"/>
 	<classpathentry exported="true" path="/AlertSystem-core" kind="src"/>

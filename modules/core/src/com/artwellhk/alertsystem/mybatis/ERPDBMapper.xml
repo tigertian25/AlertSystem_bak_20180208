@@ -11,6 +11,9 @@
 		<id column="styleID" property="id"/>
 		<result column="sNumber" property="styleNumber"/>
 		<result column="xStyleNo" property="styleNo"/>
+		<result column="isReceive" property="isReceive"/>
+		<result column="gonYiSendTime" property="gonYiSendTime"/>
+		<result column="gongYiSendEmpl" property="gongYiSendEmpl"/>
 	</resultMap>
 
 	<select id="getProcess" parameterType="java.util.Map" resultMap="ProcessMap">
@@ -50,8 +53,34 @@
 			sID DESC
 		
 	</select>
-	<!-- 获取所有未完成的版单-->
-	<select id="getAllStyle"  resultMap="SampleOrder">
+	<!-- 获取所有未完成并且工艺发出未收回的版单-->
+	<select id="getAllStyleOfGOngYiSend"  resultMap="SampleOrder">
+		SELECT
+			ets.sID AS styleID,
+			ets.sNumber,
+			ets.xStyleNo,
+			lsi.xStatus AS isReceive,
+			lsi.xDateTime AS 'gonYiSendTime',
+			emp.xName AS 'gongYiSendEmpl',
+			lsr.xDateTime AS 'gongYiReceiveTime'
+		FROM
+			ERPDB.dbo.et_style ets
+			LEFT JOIN ERPDB.dbo.lt_style_issue lsi ON lsi.rStyle_ID = ets.sID
+			LEFT JOIN ERPDB.dbo.zt_empl emp ON lsi.rEmpl_ID = emp.sID
+			LEFT JOIN ERPDB.dbo.lt_style_receive lsr ON lsr.rStyle_ID=ets.sID
+		WHERE
+			ets.xStatus = 2
+			AND ets.sID IN (
+				SELECT
+					lsi.rStyle_ID
+				FROM
+					ERPDB.dbo.lt_style_issue lsi
+			)
+		ORDER BY
+			ets.sID DESC
+		
+	</select>
+<!-- 	<select id="getAllStyle"  resultMap="SampleOrder">
 		SELECT
 			
 			sID AS styleID,
@@ -65,7 +94,7 @@
 		ORDER BY
 			sID DESC
 		
-	</select>
+	</select> -->
 	<select id="getGongYiSend" parameterType="int" resultType="Map">
 		SELECT
 			lsi.sID,

@@ -9,8 +9,7 @@
         <groupDatasource id="alertsDs"
                          allowCommit="false"
                          class="com.artwellhk.alertsystem.entity.Alert"
-                         datasourceClass="com.artwellhk.alertsystem.web.myDatasource.AlertListDatasource"
-                         refreshMode="NEVER"/>
+                         datasourceClass="com.artwellhk.alertsystem.web.myDatasource.AlertListDatasource"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
