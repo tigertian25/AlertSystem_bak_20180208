@@ -40,7 +40,7 @@ public class util {
 		if (s > 0) {
 			timeDifference += s + "秒";
 		}
-		System.out.println("" + day + "天" + hour + "小时" + min + "分" + s + "秒");
+		//System.out.println("" + day + "天" + hour + "小时" + min + "分" + s + "秒");
 
 		return timeDifference;
 	}

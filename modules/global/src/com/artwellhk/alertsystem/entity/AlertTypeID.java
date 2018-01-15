@@ -7,20 +7,19 @@ import javax.annotation.Nullable;
 
 public enum AlertTypeID implements EnumClass<Integer> {
 
-    GongYiNoSend(1),
-    GongYiNoReceive(2),
-    HuaHuaNoSend(3),
-    HuaHuaNoReceive(4),
-    DianJiNoSend(5),
-    DianJiNoReceive(6),
-    TaoKouNoSend(7),
-    TaoKouNoReceive(8),
-    ShouFengNoSend(9),
-    ShouFengNoReceive(10),
-    XiShuiNoSend(11),
-    XiShuiNoReceive(12),
-    TangYiNoSend(13),
-    TangYiNoReceive(14);
+    GongYiNoReceive(102),
+    HuaHuaNoSend(103),
+    HuaHuaNoReceive(104),
+    DianJiNoSend(105),
+    DianJiNoReceive(106),
+    TaoKouNoSend(107),
+    TaoKouNoReceive(108),
+    ShouFengNoSend(109),
+    ShouFengNoReceive(110),
+    XiShuiNoSend(111),
+    XiShuiNoReceive(112),
+    TangYiNoSend(113),
+    TangYiNoReceive(114);
 
     private Integer id;
 

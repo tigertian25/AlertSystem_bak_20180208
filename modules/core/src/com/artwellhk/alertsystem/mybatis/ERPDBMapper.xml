@@ -7,13 +7,15 @@
 		<result column="NAME" property="name"/>
 		<result column="ZT_WORKING_ID" property="zt_working_id"/>
 	</resultMap>
-	<resultMap type="com.artwellhk.alertsystem.entity.SampleOrder" id="SampleOrder">
+	<resultMap type="com.artwellhk.alertsystem.entity.SampleOrder" id="SampleOrderMap">
 		<id column="styleID" property="id"/>
 		<result column="sNumber" property="styleNumber"/>
 		<result column="xStyleNo" property="styleNo"/>
 		<result column="isReceive" property="isReceive"/>
-		<result column="gonYiSendTime" property="gonYiSendTime"/>
 		<result column="gongYiSendEmpl" property="gongYiSendEmpl"/>
+		<result column="gonYiSendTime" property="gonYiSendTime"/>
+		<result column="gongYiReceiveTime" property="gongYiReceiveTime"/>
+		
 	</resultMap>
 
 	<select id="getProcess" parameterType="java.util.Map" resultMap="ProcessMap">
@@ -25,76 +27,30 @@
 		and ZT_WORKING_ID=#{ztWorkingId}
 		</if>
 	</select>
-	<!-- 获取所有未完成的版单-分页 -->
-	<select id="getStylePageList"  resultType="Map">
-		SELECT
-			TOP 10 ROW_NUMBER () OVER (ORDER BY sID DESC) AS ROWNO,
-			sID AS styleID,
-			sNumber,
-			xStyleNo,
-			xStatus
-		FROM
-			ERPDB.dbo.et_style
-		WHERE
-			sID NOT IN (
-				SELECT
-					TOP (10 *(1 - 1)) sID
-				FROM
-					ERPDB.dbo.et_style
-				WHERE
-					xStatus  <![CDATA[ < ]]> 5
-				AND xStatus <![CDATA[ >= ]]> 0
-				ORDER BY
-					sID DESC
-			)
-		AND xStatus <![CDATA[ < ]]> 5
-		AND xStatus <![CDATA[ >= ]]> 0
-		ORDER BY
-			sID DESC
-		
-	</select>
+	
 	<!-- 获取所有未完成并且工艺发出未收回的版单-->
-	<select id="getAllStyleOfGOngYiSend"  resultMap="SampleOrder">
+	<select id="getAllStyleOfGOngYiSend"  resultMap="SampleOrderMap">
 		SELECT
+		top 1 
 			ets.sID AS styleID,
 			ets.sNumber,
 			ets.xStyleNo,
 			lsi.xStatus AS isReceive,
-			lsi.xDateTime AS 'gonYiSendTime',
-			emp.xName AS 'gongYiSendEmpl',
-			lsr.xDateTime AS 'gongYiReceiveTime'
+			lsi.xDateTime AS gonYiSendTime,
+			emp.xName AS gongYiSendEmpl,
+			lsr.xDateTime AS gongYiReceiveTime
 		FROM
-			ERPDB.dbo.et_style ets
-			LEFT JOIN ERPDB.dbo.lt_style_issue lsi ON lsi.rStyle_ID = ets.sID
-			LEFT JOIN ERPDB.dbo.zt_empl emp ON lsi.rEmpl_ID = emp.sID
-			LEFT JOIN ERPDB.dbo.lt_style_receive lsr ON lsr.rStyle_ID=ets.sID
+			ERPDB.dbo.lt_style_issue lsi
+		LEFT JOIN ERPDB.dbo.et_style ets ON lsi.rStyle_ID = ets.sID
+		LEFT JOIN ERPDB.dbo.zt_empl emp ON lsi.rEmpl_ID = emp.sID
+		LEFT JOIN ERPDB.dbo.lt_style_receive lsr ON lsr.rStyle_ID = ets.sID
 		WHERE
 			ets.xStatus = 2
-			AND ets.sID IN (
-				SELECT
-					lsi.rStyle_ID
-				FROM
-					ERPDB.dbo.lt_style_issue lsi
-			)
 		ORDER BY
 			ets.sID DESC
 		
 	</select>
-<!-- 	<select id="getAllStyle"  resultMap="SampleOrder">
-		SELECT
-			
-			sID AS styleID,
-			sNumber,
-			xStyleNo
-		FROM
-			ERPDB.dbo.et_style
-		WHERE
-			xStatus <![CDATA[ < ]]> 5
-			AND xStatus <![CDATA[ >= ]]> 0
-		ORDER BY
-			sID DESC
-		
-	</select> -->
+
 	<select id="getGongYiSend" parameterType="int" resultType="Map">
 		SELECT
 			lsi.sID,

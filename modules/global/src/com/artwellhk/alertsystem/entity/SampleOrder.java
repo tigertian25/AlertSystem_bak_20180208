@@ -24,27 +24,29 @@ public class SampleOrder extends BaseIntegerIdEntity {
     protected String gongYiSendEmpl;
 
     @MetaProperty
-    protected String gonYiSendTime;
+    protected Date gonYiSendTime;
 
     @MetaProperty
-    protected String gongYiReceiveTime;
+    protected Date gongYiReceiveTime;
 
-    public void setGongYiReceiveTime(String gongYiReceiveTime) {
-        this.gongYiReceiveTime = gongYiReceiveTime;
-    }
-
-    public String getGongYiReceiveTime() {
-        return gongYiReceiveTime;
-    }
-
-
-    public String getGonYiSendTime() {
+    public Date getGonYiSendTime() {
         return gonYiSendTime;
     }
 
-    public void setGonYiSendTime(String gonYiSendTime) {
+    public void setGonYiSendTime(Date gonYiSendTime) {
         this.gonYiSendTime = gonYiSendTime;
     }
+
+
+    public Date getGongYiReceiveTime() {
+        return gongYiReceiveTime;
+    }
+
+    public void setGongYiReceiveTime(Date gongYiReceiveTime) {
+        this.gongYiReceiveTime = gongYiReceiveTime;
+    }
+
+
 
 
     public void setGongYiSendEmpl(String gongYiSendEmpl) {

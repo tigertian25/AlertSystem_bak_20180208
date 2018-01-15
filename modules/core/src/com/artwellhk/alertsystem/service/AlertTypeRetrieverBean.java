@@ -35,10 +35,10 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 
 	@Override
 	public List<Alert> retrieveList(List<SampleOrder> sampleOrderList) {
-		List<Alert> alertList = new ArrayList<Alert>();
+		List<Alert> alertList = new ArrayList<>();
 		if (sampleOrderList.size() > 0) {
 			// 存放临时数据
-			Map<String, Object> parameter = new HashMap<>();
+
 			Object obj = null;// 当前工序
 			Object objNext = null;// 下一工序
 			// 循环sampleOrderList
@@ -46,51 +46,62 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 				// 工艺未发出
 				obj = null;
 
-				parameter.clear();
-//				parameter.put("styleID", 531410628);
+				Map<String, Object> parameter = new HashMap<>();
+				// parameter.put("styleID", 531410628);
 				parameter.put("styleID", sampleOrder.getId());
 
-				
 				// 工艺未收回
 				if (sampleOrder.getIsReceive() == 1) {
-					alertList.add(calculatorAlert(sampleOrder, null,
-							AlertTypeID.GongYiNoReceive.getId(),1));
+					Alert alert = calculatorAlert(sampleOrder, null, AlertTypeID.GongYiNoReceive.getId(), 1);
+					if (null != alert) {
+						alertList.add(alert);
+					}
 					continue;
 				}
 				// 画花未发出
-				//obj = objNext;
+				// obj = objNext;
 				objNext = selectOneMapByOParameter("ERPDBMapper.getHuaHuaSend", parameter);
-				if (objNext == null) {
-					alertList.add(
-							calculatorAlert(sampleOrder, null, AlertTypeID.HuaHuaNoSend.getId(),2));
+				if (null == objNext) {
+					Alert alert = calculatorAlert(sampleOrder, null, AlertTypeID.HuaHuaNoSend.getId(), 2);
+					if (null != alert) {
+						alertList.add(alert);
+					}
 					continue;
 				}
 				// 判断是否画花收回
 				obj = objNext;
 				objNext = selectOneMapByOParameter("ERPDBMapper.getHuaHuaReceive", parameter);
-				if (objNext == null) {
-					alertList.add(calculatorAlert(sampleOrder, (Map<String, Object>) obj,
-							AlertTypeID.HuaHuaNoReceive.getId(),3));
+				if (null == objNext) {
+					Alert alert = calculatorAlert(sampleOrder, (Map<String, Object>) obj,
+							AlertTypeID.HuaHuaNoReceive.getId(), 3);
+					if (null != alert) {
+						alertList.add(alert);
+					}
 					continue;
 				}
-				// 判断是否电机发出
+				
 				/**
 				 * 查询电机部及后面工序的发出记录(查询最新一条收回记录) ，if(iss.*为空){表示电机部未发出}else
 				 * if(issbc.aStatus=1){是未收回}else if(issbc.aStatus=3){已收回，
 				 * if(收回的工序不是最后工序){返回收回时间}}
 				 */
 				obj = objNext;
-				objNext = selectOneMapByOParameter("ERPDBMapper.getIssue60ByStyleID", parameter);
-				if (objNext == null) {// 电机未发出
-					alertList.add(
-							calculatorAlert(sampleOrder, (Map<String, Object>) obj, AlertTypeID.DianJiNoSend.getId(),3));
+				objNext = selectOneMapByOParameter("ERPDBMapper.getIssue60ByStyleID", parameter);// 最近一个发出的工序
+				if (null == objNext) {// 表示画花收回后没工序发出即 电机未发出
+					Alert alert = calculatorAlert(sampleOrder, (Map<String, Object>) obj,
+							AlertTypeID.DianJiNoSend.getId(), 3);
+					if (null != alert) {
+						alertList.add(alert);
+					}
 					continue;
-				} else {
-					Map<String, Object> map = (Map<String, Object>) obj;// 当前工序
-					Process process = new Process();
-					try (Transaction tx = persistence.createTransaction()) {
+				} else {// 最近发出的工序
+					obj = objNext;
+					Map<String, Object> map = (Map<String, Object>) obj;// 最近发出的工序
+					Process process = null;
+					try (Transaction tx = persistence.createTransaction()) {// 查询最近发出的工序是什么工序
 						EntityManager em = persistence.getEntityManager();
-						process = (Process) em.createQuery(
+						process = (Process) em
+								.createQuery(
 										"select o from alertsystem$Process o where o.zt_working_id = :zt_working_id")
 								.setParameter("zt_working_id", map.get("sendWorkId")).getSingleResult();
 						tx.commit();
@@ -98,10 +109,10 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 						e.printStackTrace();
 						return null;
 					}
-					if ("1".equals(map.get("aStatus").toString())) {// aStatus=1表示当前工序发出未收回
+					if (null != process && "1".equals(map.get("aStatus").toString())) {// aStatus=1表示当前工序发出未收回
 
 						// 判断当前工序是什么
-						AlertType alertType = new AlertType();
+						AlertType alertType = null;
 						try (Transaction tx = persistence.createTransaction()) {
 							EntityManager em = persistence.getEntityManager();
 							alertType = (AlertType) em.createQuery(
@@ -112,14 +123,16 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 						} catch (NoResultException e) {
 							return null;
 						}
-						Alert alert = new Alert(alertType, util.stringToDate(map.get("sendTime").toString()),
-								sampleOrder, map.get("sendEmployee").toString());
-						alertList.add(alert);
+						if (null != alertType) {
+							Alert alert = new Alert(alertType, util.stringToDate(map.get("sendTime").toString()),
+									sampleOrder, map.get("sendEmployee").toString());
+							alertList.add(alert);
+						}
 						continue;
 					}
-					if ("3".equals(map.get("aStatus").toString())) {// aStatus=3表示当前工序已收回，下一工序未发出
+					if (null != process && "3".equals(map.get("aStatus").toString())) {// aStatus=3表示当前工序已收回，下一工序未发出
 						// 判断当前工序是否未最后工序
-						AlertType alertType = new AlertType();
+						AlertType alertType = null;
 						try (Transaction tx = persistence.createTransaction()) {
 							EntityManager em = persistence.getEntityManager();
 							alertType = (AlertType) em.createQuery(
@@ -131,7 +144,7 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 							return null;
 						}
 						// 比较最后一个alertType的收回工序与当前收回工序是否相等
-						if (alertType.getFromProcess().getId() != process.getId()) {// 表示当前工序不是最后工序
+						if (null != alertType && alertType.getFromProcess().getId() != process.getId()) {// 表示当前工序不是最后工序
 							try (Transaction tx = persistence.createTransaction()) {
 								EntityManager em = persistence.getEntityManager();
 								alertType = (AlertType) em.createQuery(
@@ -142,23 +155,28 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 							} catch (NoResultException e) {
 								return null;
 							}
-							Alert alert = new Alert(alertType, util.stringToDate(map.get("receiveTime").toString()),
-									sampleOrder, map.get("receiveName").toString());
-							alertList.add(alert);
+							if (null != alertType) {
+								Alert alert = new Alert(alertType, util.stringToDate(map.get("receiveTime").toString()),
+										sampleOrder, map.get("receiveName").toString());
+								alertList.add(alert);
+							}
 							continue;
 						}
 					}
 				}
-				
+
 			}
 		}
+		//System.out.println("--retrieveList:"+gson.toJson(alertList));
 		return alertList;
 	}
-/*
- * dataType:1工艺未收回，2画花未发出，3其他
- */
-	private Alert calculatorAlert(SampleOrder sampleOrder, Map<String, Object> map, int alertTypeID,int dataType) {
-		AlertType alertType = new AlertType();
+
+	/*
+	 * dataType:1工艺未收回，2画花未发出，3其他
+	 */
+	private Alert calculatorAlert(SampleOrder sampleOrder, Map<String, Object> map, int alertTypeID, int dataType) {
+		
+		AlertType alertType = null;
 		try (Transaction tx = persistence.createTransaction()) {
 			EntityManager em = persistence.getEntityManager();
 			alertType = (AlertType) em.createQuery(
@@ -169,21 +187,24 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 		} catch (NoResultException e) {
 			return null;
 		}
-		Alert alert = new Alert();
-		if(dataType==1) {//工艺未收回
-			alert = new Alert(alertType,sampleOrder);
-			alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
-			alert.setFromTimestamp(util.stringToDate(sampleOrder.getGonYiSendTime()));
-		}else if(dataType==2) {//画花未发出
-			alert = new Alert(alertType,sampleOrder);
-			alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
-			alert.setFromTimestamp(util.stringToDate(sampleOrder.getGongYiReceiveTime()));
-		}else {
-		alert = new Alert(alertType, util.stringToDate(map.get("fromTimestamp").toString()), sampleOrder,
-					map.get("employeeName").toString());
+		
+		Alert alert = null;
+		if (null != alertType) {
+			if (dataType == 1) {// 工艺未收回
+				alert = new Alert(alertType, sampleOrder);
+				alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
+				alert.setFromTimestamp(sampleOrder.getGonYiSendTime());
+			} else if (dataType == 2) {// 画花未发出
+				alert = new Alert(alertType, sampleOrder);
+				alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
+				alert.setFromTimestamp(sampleOrder.getGongYiReceiveTime());
+			} else {
+				alert = new Alert(alertType, util.stringToDate(map.get("fromTimestamp").toString()), sampleOrder,
+						map.get("employeeName").toString());
+			}
 		}
-		//System.out.println(gson.toJson(alert));
 		return alert;
+
 	}
 
 	/**
@@ -195,17 +216,17 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 	 */
 	public Object selectOneMapByOParameter(String sqlname, Map<String, Object> parameter) {
 		Object obj = null;
-		
+
 		Transaction tx = persistence.createTransaction("ERPDB");
 		try {
-			SqlSession sqlSession = AppBeans.get("sqlSession");
+			SqlSession sqlSession = AppBeans.get("sqlSession_ERPDB");
 			obj = sqlSession.selectOne(sqlname, parameter);
 			tx.commit();
 
 		} catch (NoResultException e) {
 			return null;
-		}finally {
-			  tx.end();
+		} finally {
+			tx.end();
 		}
 		return obj;
 	}

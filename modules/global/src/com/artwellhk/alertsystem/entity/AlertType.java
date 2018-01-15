@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import com.haulmont.chile.core.annotations.NamePattern;
 
-@NamePattern("%s %s %s %s %s|fromProcess,fromProcessType,toProcess,toProcessType,allowedDuration")
+@NamePattern("%s %s %s|fromProcess,toProcess,allowedDuration")
 @Table(name = "ALERTSYSTEM_ALERT_TYPE")
 @Entity(name = "alertsystem$AlertType")
 public class AlertType extends BaseIntegerIdEntity {
@@ -104,11 +104,31 @@ public class AlertType extends BaseIntegerIdEntity {
     public AlertType(int id, Process fromProcess,Process toProcess,Integer allowedDuration,Integer fromProcessType,Integer toProcessType) {
     	this.id=id;this.fromProcess=fromProcess;this.toProcess=toProcess;this.allowedDuration=allowedDuration;
     	this.fromProcessType=fromProcessType;this.toProcessType=toProcessType;
+    	if(fromProcessType==1) {
+    		this.fromProcess.name=this.fromProcess.name+"发出";
+    	}else if(fromProcessType==2) {
+    		this.fromProcess.name=this.fromProcess.name+"收回";
+    	}
+    	if(toProcessType==1) {
+    		this.toProcess.name=this.toProcess.name+"发出";
+    	}else if(toProcessType==2) {
+    		this.toProcess.name=this.toProcess.name+"收回";
+    	}
 	}
     public AlertType(int id, Process fromProcess,Process toProcess,Integer allowedDuration,Integer fromProcessType,Integer toProcessType,Integer singleMaxDuration,Integer totalMaxDuration) {
     	this.id=id;this.fromProcess=fromProcess;this.toProcess=toProcess;this.allowedDuration=allowedDuration;
     	this.singleMaxDuration=singleMaxDuration;this.totalMaxDuration=totalMaxDuration;
     	this.fromProcessType=fromProcessType;this.toProcessType=toProcessType;
+    	if(fromProcessType==1) {
+    		this.fromProcess.name=this.fromProcess.name+"发出";
+    	}else if(fromProcessType==2) {
+    		this.fromProcess.name=this.fromProcess.name+"收回";
+    	}
+    	if(toProcessType==1) {
+    		this.toProcess.name=this.toProcess.name+"发出";
+    	}else if(toProcessType==2) {
+    		this.toProcess.name=this.toProcess.name+"收回";
+    	}
     }
 
 	public AlertType() {

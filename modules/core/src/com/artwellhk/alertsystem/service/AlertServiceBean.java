@@ -11,7 +11,8 @@ import javax.persistence.NoResultException;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.artwellhk.alertsystem.core.util;
@@ -27,6 +28,7 @@ import com.haulmont.cuba.core.global.AppBeans;
 @Service(AlertService.NAME)
 public class AlertServiceBean implements AlertService {
 	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+	private Logger log = LoggerFactory.getLogger(AlertServiceBean.class);
 	@Inject
 	private Persistence persistence;
 	@Inject
@@ -51,44 +53,40 @@ public class AlertServiceBean implements AlertService {
 		System.out.println("enter calculateAlertList!!!!!!!!!! ");
 		List<Alert> returnAlertList = new ArrayList<Alert>();
 		List<Alert> alertList = getAlertList();
-		
-		if (alertList.size() > 0) {
-//			for (Alert alert : alertList) {
-//				if (isOverTime()) {// 是否超时
-//					if (isSetSnoozeTime()) {// 是否设置睡眠
-//						if (isOverSnoozeTime()) {// 是否超过睡眠时间
-//							returnAlertList.add(alert);
-//						}
-//
-//					} else {
-//						returnAlertList.add(alert);
-//					}
-//				}
-//			}
+
+		if (null != alertList && alertList.size() > 0) {
+			// for (Alert alert : alertList) {
+			// if (isOverTime()) {// 是否超时
+			// if (isSetSnoozeTime()) {// 是否设置睡眠
+			// if (isOverSnoozeTime()) {// 是否超过睡眠时间
+			// returnAlertList.add(alert);
+			// }
+			//
+			// } else {
+			// returnAlertList.add(alert);
+			// }
+			// }
+			// }
 			for (Alert alert : alertList) {// 循环计算超时的数据
 				try {
-					if(("").equals(alert.getFromTimestamp())||null==alert.getFromTimestamp()) {//工艺未发出
-						returnAlertList.add(alert);
-						continue;
-					}
 					String timeDifference = "";// 此字段用于显示超时多少时间
 					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					Date now = df.parse(df.format(new Date()));// 当前时间
 					// 超出规定时间
 					int allowedDuration = alert.getAlertType().getAllowedDuration();// 规定时限
 					Date fromTimestamp = alert.getFromTimestamp();// 当前工序完成时间
-					Date lastTimestamp = DateUtils.addSeconds(fromTimestamp, allowedDuration);//规定完成时间
+					Date lastTimestamp = DateUtils.addSeconds(fromTimestamp, allowedDuration);// 规定完成时间
 					alert.setLastTimestamp(lastTimestamp);
 					if (now.getTime() > lastTimestamp.getTime()) {// 当前时间大于规定时间表示超时
 						AlertSnooze alertSnooze = snoozeAccessor.getSnooze(alert.getSampleOrder().getId(),
 								alert.getAlertType().getId());
 
-						if ( alertSnooze != null&&alertSnooze.getId()>0) {// 设置了睡眠
+						if (alertSnooze != null && alertSnooze.getId() > 0) {// 设置了睡眠
 
 							Date durationDate = alertSnooze.getCreateTs();
-							
+
 							Date snoozeTime = DateUtils.addSeconds(durationDate, allowedDuration);
-							
+
 							if (now.getTime() > snoozeTime.getTime()) {// 当前时间大于睡眠后的时间
 								timeDifference = util.dateUtil(now, snoozeTime);
 								alert.setTimeDifference(timeDifference);
@@ -107,34 +105,31 @@ public class AlertServiceBean implements AlertService {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				//System.out.println("returnAlertList--"+gson.toJson(returnAlertList));
+				
 			}
 		}
+		log.debug("returnAlertList:"+gson.toJson(returnAlertList));
 		return returnAlertList;
 
 	}
 
 	protected List<Alert> getAlertList() {
 		List<Alert> alertList = new ArrayList<Alert>();
-		List<SampleOrder> sampleOrderList = new ArrayList<SampleOrder>();
-		//查询所有未完成且工艺发出未收回的版单
-		System.out.println("select style star-----"+new Date());
-		try (Transaction tx = persistence.createTransaction("ERPDB")){
-			SqlSession sqlSession = AppBeans.get("sqlSession");
+		List<SampleOrder> sampleOrderList = new ArrayList<>();
+		// 查询所有未完成且工艺发出未收回的版单
+		
+		Transaction tx = persistence.createTransaction("ERPDB");
+		try {
+			SqlSession sqlSession = AppBeans.get("sqlSession_ERPDB");
 			sampleOrderList = sqlSession.selectList("ERPDBMapper.getAllStyleOfGOngYiSend");
+
 			tx.commit();
 		} catch (NoResultException e) {
-			return null;
+			e.printStackTrace();
 		}
-		System.out.println("select style end-----"+new Date());
-		if(sampleOrderList!=null&&sampleOrderList.size()>0) {
-			System.out.println("star alertTypeRetriever-----"+new Date());
-			alertList=alertTypeRetriever.retrieveList(sampleOrderList);
-			System.out.println("end alertTypeRetriever-----"+new Date());
-			return alertList;
-		}else {
-			return null;
-		}
+		alertList = alertTypeRetriever.retrieveList(sampleOrderList);
 		
+		return alertList;
+
 	}
 }

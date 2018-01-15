@@ -12,7 +12,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 
-public class AlertListDatasource extends CustomGroupDatasource<Alert, Integer> {
+public class AlertListDatasource extends CustomCollectionDatasource<Alert, Integer> {
 @Inject
 	  AlertService alertService = AppBeans.get(AlertService.NAME);
 
