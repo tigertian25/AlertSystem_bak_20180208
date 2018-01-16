@@ -51,22 +51,22 @@ public class AlertCalculatorImplTest extends AlertServiceBean {
 	@Override
 	protected List<Alert> getAlertList(){
 		List<Alert> alertList=new ArrayList<Alert>();
-		AlertType alertType = new AlertType(1, new Process(2, "工艺发出"), new Process(3, "工艺收回"), 60 * 30,1,2);
-		Alert alert = new Alert(alertType, DateUtils.addSeconds(new Date(), -60 * 30 - 20), new SampleOrder(123456, "sp-123456","L123456"),"张三");
+		AlertType alertType = new AlertType(1, new Process(2, "宸ヨ壓鍙戝嚭"), new Process(3, "宸ヨ壓鏀跺洖"), 60 * 30,1,2);
+		Alert alert = new Alert(alertType, DateUtils.addSeconds(new Date(), -60 * 30 - 20), new SampleOrder(123456, "sp-123456","L123456"),"寮犱笁");
 		alertList.add(alert);
 		return alertList;
 	}
 	@Test
 	public void testCalculateAlertList() {
-		 List<Alert> alertList=calculateAlertList();
+		 List<Alert> alertList=(List<Alert>) calculateAlertList();
 		 String alertListString = gson.toJson(alertList);
-		 log.debug("alertList：" + alertListString);
+		 log.debug("alertList锛�" + alertListString);
 	}
 	@Test
 	public void testgetAlertList() {
 	List<Alert> alertList = new ArrayList<Alert>();
 	List<SampleOrder> sampleOrderList = null;
-	//查询所有未完成且工艺发出未收回的版单
+	//鏌ヨ鎵�鏈夋湭瀹屾垚涓斿伐鑹哄彂鍑烘湭鏀跺洖鐨勭増鍗�
 	System.out.println("select style star-----"+new Date());
 	try (Transaction tx = persistence.createTransaction()){
 		SqlSession sqlSession = AppBeans.get("sqlSession");

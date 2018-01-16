@@ -7,37 +7,27 @@
         <collectionDatasource id="alertsDs"
                               allowCommit="false"
                               class="com.artwellhk.alertsystem.entity.Alert"
-                              datasourceClass="com.artwellhk.alertsystem.web.myDatasource.AlertListDatasource"/>
+                              datasourceClass="com.artwellhk.alertsystem.web.myDatasource.AlertListDatasource"
+                              />
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
     <layout spacing="true">
-        <table id="table"
+        <table id="alertsTable"
                height="100%"
                width="100%">
             <columns>
-                <column id="sampleOrder.styleNumber"
-                        caption="版单号"/>
-                <column id="styleNumber.styleNo"
-                        caption="款号"/>
-                <column id="alertType.fromProcess.name"
-                        caption="当前工序"/>
-                <column id="fromTimestamp"
-                        caption="完成时间"/>
-                <column id="employeeName"
-                        caption="负责人"/>
-                <column id="alertType.toProcess.name"
-                        caption="下一工序"/>
-                <column id="lastTimestamp"
-                        caption="预计完成时间"/>
-                <column id="timeDifference"
-                        caption="超出时间"/>
-                <column id="sampleOrder.id"
-                        visible="false"/>
-                <column id="alertType.id"
-                        visible="false"/>
+                <column id="alertType.fromProcess.name"/>
+                <column id="sampleOrder.styleNumber"/>
+                <column id="fromTimestamp"/>
+                <column id="lastTimestamp"/>
+                <column id="timeDifference"/>
+                <column id="employeeName"/>
             </columns>
             <rows datasource="alertsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
         </table>
     </layout>
 </window>

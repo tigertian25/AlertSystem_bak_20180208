@@ -4,5 +4,6 @@
                     root-package="com.artwellhk.alertsystem">
         <class>com.artwellhk.alertsystem.entity.Alert</class>
         <class>com.artwellhk.alertsystem.entity.SampleOrder</class>
+        <class>com.artwellhk.alertsystem.entity.TestEntity</class>
     </metadata-model>
 </metadata>

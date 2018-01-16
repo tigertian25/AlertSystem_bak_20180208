@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="com.artwellhk.alertsystem.web.testentity.TestEntityBrowse"
+        messagesPack="com.artwellhk.alertsystem.web.testentity">
+    <dsContext>
+        <collectionDatasource id="testEntitiesDs"
+                              allowCommit="false"
+                              class="com.artwellhk.alertsystem.entity.TestEntity"
+                              datasourceClass="com.artwellhk.alertsystem.web.myDatasource.TestCollectionDatasource"
+                              />
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <table id="testEntitiesTable"
+               height="100%"
+               width="100%">
+            <columns>
+                <column id="name"/>
+                <column id="info"/>
+            </columns>
+            <rows datasource="testEntitiesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
+        </table>
+    </layout>
+</window>

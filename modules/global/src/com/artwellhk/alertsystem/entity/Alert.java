@@ -8,6 +8,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.haulmont.cuba.core.entity.BaseIntegerIdEntity;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
+
 import javax.validation.constraints.NotNull;
 import com.haulmont.chile.core.annotations.NamePattern;
 import java.util.UUID;
@@ -17,7 +19,7 @@ import freemarker.template.SimpleDate;
 
 @NamePattern("%s %s %s %s %s %s|sampleOrder,alertType,employeeName,fromTimestamp,lastTimestamp,timeDifference")
 @MetaClass(name = "alertsystem$Alert")
-public class Alert extends BaseIntegerIdEntity {
+public class Alert extends BaseUuidEntity {
     private static final long serialVersionUID = 4543700162506865893L;
 
     @NotNull
@@ -38,6 +40,7 @@ public class Alert extends BaseIntegerIdEntity {
 
     @MetaProperty
     protected String employeeName;
+
 
 
     public void setSampleOrder(SampleOrder sampleOrder) {

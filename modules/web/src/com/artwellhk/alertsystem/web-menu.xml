@@ -4,7 +4,7 @@
           insertBefore="administration">
         <item screen="alertsystem$Process.browse"/>
         <item screen="alertsystem$AlertType.browse"/>
-        <item screen="alertsystem$Alert.browse"/>
         <item screen="alertsystem$AlertSnooze.browse"/>
+        <item screen="alertsystem$Alert.browse"/>
     </menu>
 </menu-config>
