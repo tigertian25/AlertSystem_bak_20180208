@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class AlertSnoozeEdit extends AbstractEditor<AlertSnooze> {
-	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+	/*Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	private Logger log = LoggerFactory.getLogger(AlertBrowse.class);
 	private Map<String, Object> SnoozeParams=new HashMap<>();
 	@Inject
@@ -39,5 +39,5 @@ public class AlertSnoozeEdit extends AbstractEditor<AlertSnooze> {
 
     public void onButton_1Click() {
     	 close(Window.CLOSE_ACTION_ID);
-    }
+    }*/
 }

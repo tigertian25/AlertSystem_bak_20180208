@@ -38,7 +38,7 @@ public class AlertBrowse extends AbstractWindow {
 		//String message ="锟斤拷选锟叫匡拷牛锟�"+ alert.getSampleOrder().getStyleNo();
 		alertSnooze.setAlertType(alert.getAlertType());
 		alertSnooze.setSampleOrderId(alert.getSampleOrder().getId());
-		//openEditor("alertsystem$AlertSnooze.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
-		openEditor("alertsystem$AlertSnooze2.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
+		openEditor("alertsystem$AlertSnooze.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
+		//openEditor("alertsystem$AlertSnooze2.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
     }
 }
