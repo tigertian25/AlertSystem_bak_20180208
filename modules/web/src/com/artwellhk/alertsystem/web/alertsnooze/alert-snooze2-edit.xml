@@ -17,7 +17,8 @@
         <fieldGroup id="fieldGroup"
                     datasource="alertSnoozeDs">
             <column width="250px">
-                <field property="sampleOrderId"/>
+                <field editable="false"
+                       property="sampleOrderId"/>
                 <field property="duration"/>
             </column>
         </fieldGroup>

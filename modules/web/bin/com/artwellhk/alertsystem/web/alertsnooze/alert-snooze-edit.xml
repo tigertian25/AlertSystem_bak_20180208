@@ -54,8 +54,11 @@
         <fieldGroup id="fieldGroup"
                     datasource="alertSnoozeDs">
             <column width="250px">
-                <field property="sampleOrderId" caption="styleID"/>
-                <field property="duration" caption="睡眠时间"/>
+                <field caption="styleID"
+                       editable="false"
+                       property="sampleOrderId"/>
+                <field caption="睡眠时间"
+                       property="duration"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"
