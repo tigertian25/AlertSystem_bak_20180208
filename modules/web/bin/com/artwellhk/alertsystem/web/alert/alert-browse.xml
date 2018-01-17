@@ -9,6 +9,9 @@
                               class="com.artwellhk.alertsystem.entity.Alert"
                               datasourceClass="com.artwellhk.alertsystem.web.myDatasource.AlertListDatasource"/>
     </dsContext>
+     <!-- <timers>
+      <timer delay="10000" autostart="true" repeating="true" onTimer="refreshData"/>
+  </timers> -->
     <dialogMode height="600"
                 width="800"/>
     <layout spacing="true">
@@ -24,10 +27,12 @@
                 <column id="sampleOrder.styleNumber" caption="版单号"/>
                 <column id="sampleOrder.styleNo" caption="款号"/>
                 <column id="alertType.fromProcess.name" caption="当前工序"/>
-                <column id="fromTimestamp" caption="完成时间" dateFormat="yyyy-MM-dd HH:mm:ss"/>
+                <column id="fromTimestamp" caption="完成时间">
+                 <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="yyyy-MM-dd HH:mm:ss"/></column>
                 <column id="employeeName" caption="负责人"/>
                 <column id="alertType.toProcess.name" caption="下一工序"/>
-                <column id="lastTimestamp" caption="预计完成时间" dateFormat="yyyy-MM-dd HH:mm:ss"/>
+                <column id="lastTimestamp" caption="预计完成时间">
+                  <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="yyyy-MM-dd HH:mm:ss"/></column>
                 <column id="timeDifference" caption="超出时间"/>
                
             </columns>

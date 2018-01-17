@@ -79,7 +79,7 @@ public class AlertServiceBean implements AlertService {
 					Date fromTimestamp = alert.getFromTimestamp();// 褰撳墠宸ュ簭瀹屾垚鏃堕棿
 					Date lastTimestamp = DateUtils.addSeconds(fromTimestamp, allowedDuration);// 瑙勫畾瀹屾垚鏃堕棿
 					alert.setLastTimestamp(lastTimestamp);
-					if (now.getTime() > lastTimestamp.getTime()) {// 褰撳墠鏃堕棿澶т簬瑙勫畾鏃堕棿琛ㄧず瓒呮椂
+					if (now.getTime() > lastTimestamp.getTime()&&(now.getTime()-lastTimestamp.getTime())>1000) {// 褰撳墠鏃堕棿澶т簬瑙勫畾鏃堕棿琛ㄧず瓒呮椂
 						AlertSnooze alertSnooze = snoozeAccessor.getSnooze(alert.getSampleOrder().getId(),
 								alert.getAlertType().getId());
 
@@ -89,7 +89,7 @@ public class AlertServiceBean implements AlertService {
 
 							Date snoozeTime = DateUtils.addSeconds(durationDate, allowedDuration);
 
-							if (now.getTime() > snoozeTime.getTime()) {// 褰撳墠鏃堕棿澶т簬鐫＄湢鍚庣殑鏃堕棿
+							if (now.getTime() > snoozeTime.getTime()&&(now.getTime()-snoozeTime.getTime())>1000) {// 褰撳墠鏃堕棿澶т簬鐫＄湢鍚庣殑鏃堕棿
 								timeDifference = util.dateUtil(now, snoozeTime);
 								alert.setTimeDifference(timeDifference);
 								returnAlertList.add(alert);

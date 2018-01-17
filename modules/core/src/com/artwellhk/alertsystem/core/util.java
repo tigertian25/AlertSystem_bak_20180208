@@ -21,9 +21,10 @@ public class util {
 
 	// 计算时间差工具
 	public static String dateUtil(Date d1, Date d2) {
-
-		String timeDifference = "0";
-		long l = d2.getTime() - d1.getTime();
+System.out.println("d1---"+d1.toString());
+System.out.println("d2---"+d2.toString());
+		String timeDifference = "";
+		long l = d1.getTime() - d2.getTime();
 		long day = l / (24 * 60 * 60 * 1000);
 		long hour = (l / (60 * 60 * 1000) - day * 24);
 		long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
@@ -41,7 +42,8 @@ public class util {
 			timeDifference += s + "秒";
 		}
 		//System.out.println("" + day + "天" + hour + "小时" + min + "分" + s + "秒");
-
+System.out.println("timeDifference_l:"+l+"---day:"+day+"---hour:"+hour +"---min:"+min+"---s:"+s);
+System.out.println("timeDifference:"+timeDifference);
 		return timeDifference;
 	}
 }

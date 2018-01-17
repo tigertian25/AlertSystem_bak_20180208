@@ -15,6 +15,7 @@ import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Table;
+import com.haulmont.cuba.gui.components.Timer;
 
 public class AlertBrowse extends AbstractWindow {
 	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
@@ -40,5 +41,11 @@ public class AlertBrowse extends AbstractWindow {
 		alertSnooze.setSampleOrderId(alert.getSampleOrder().getId());
 		openEditor("alertsystem$AlertSnooze.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
 		//openEditor("alertsystem$AlertSnooze2.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
+    }
+    
+    public void refreshData(Timer timer) {
+    	System.out.println("Timer is run");
+    	log.debug("Timer is runing");
+    	alertsDs.refresh();
     }
 }
