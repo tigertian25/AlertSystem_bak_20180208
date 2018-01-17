@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.artwellhk.alertsystem.core.util;
 import com.artwellhk.alertsystem.entity.Alert;
 import com.artwellhk.alertsystem.entity.AlertSnooze;
+import com.artwellhk.alertsystem.entity.AlertType;
 import com.artwellhk.alertsystem.entity.SampleOrder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -82,7 +83,7 @@ public class AlertServiceBean implements AlertService {
 						AlertSnooze alertSnooze = snoozeAccessor.getSnooze(alert.getSampleOrder().getId(),
 								alert.getAlertType().getId());
 
-						if (alertSnooze != null && alertSnooze.getId() > 0) {// 璁剧疆浜嗙潯鐪�
+						if (alertSnooze != null && null!=alertSnooze.getId()) {// 璁剧疆浜嗙潯鐪�
 
 							Date durationDate = alertSnooze.getCreateTs();
 
@@ -92,6 +93,7 @@ public class AlertServiceBean implements AlertService {
 								timeDifference = util.dateUtil(now, snoozeTime);
 								alert.setTimeDifference(timeDifference);
 								returnAlertList.add(alert);
+								continue;
 							}
 
 						} else {
@@ -99,6 +101,7 @@ public class AlertServiceBean implements AlertService {
 							timeDifference = util.dateUtil(now, lastTimestamp);
 							alert.setTimeDifference(timeDifference);
 							returnAlertList.add(alert);
+							continue;
 						}
 
 					}
@@ -113,6 +116,7 @@ public class AlertServiceBean implements AlertService {
 		return returnAlertList;
 
 	}
+
 
 	protected List<Alert> getAlertList() {
 		List<Alert> alertList = new ArrayList<Alert>();

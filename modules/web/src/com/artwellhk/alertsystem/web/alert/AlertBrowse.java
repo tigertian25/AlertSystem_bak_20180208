@@ -4,14 +4,41 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.artwellhk.alertsystem.entity.*;
 import com.artwellhk.alertsystem.web.myDatasource.AlertListDatasource;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractWindow;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.Table;
+
 public class AlertBrowse extends AbstractWindow {
+	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+	private Logger log = LoggerFactory.getLogger(AlertBrowse.class);
 	@Inject
-    private AlertListDatasource alertsDs;
+	private AlertListDatasource alertsDs;
+
 	@Override
-    public void init(Map<String, Object> params) {
-//		alertsDs.setMaxResults(50);//一页显示多少条记录
+	public void init(Map<String, Object> params) {
+		alertsDs.setMaxResults(50);// 涓�椤甸敓鏂ゆ嫹绀洪敓鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷峰綍
+	}
+
+	@Inject
+	protected Table<Alert> alertsTable;
+
+    public void setSnooze(Component source) {
+    	Alert alert = alertsTable.getSingleSelected();
+    	log.debug(gson.toJson(alert.getAlertType()));
+    	AlertSnooze alertSnooze=new AlertSnooze();
+		// there is no need in checking that customer is not null if you use ItemTrackingAction
+		//String message ="閿熸枻鎷烽�夐敓鍙尅鎷风墰閿燂拷"+ alert.getSampleOrder().getStyleNo();
+		alertSnooze.setAlertType(alert.getAlertType());
+		alertSnooze.setSampleOrderId(alert.getSampleOrder().getId());
+		//openEditor("alertsystem$AlertSnooze.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
+		openEditor("alertsystem$AlertSnooze2.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
     }
-	
 }

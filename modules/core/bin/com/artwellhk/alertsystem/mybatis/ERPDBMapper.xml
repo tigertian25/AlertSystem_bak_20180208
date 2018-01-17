@@ -31,7 +31,7 @@
 	<!-- 获取所有未完成并且工艺发出未收回的版单-->
 	<select id="getAllStyleOfGOngYiSend"  resultMap="SampleOrderMap">
 		SELECT
-		top 1 
+		  
 			ets.sID AS styleID,
 			ets.sNumber,
 			ets.xStyleNo,
@@ -46,6 +46,7 @@
 		LEFT JOIN ERPDB.dbo.lt_style_receive lsr ON lsr.rStyle_ID = ets.sID
 		WHERE
 			ets.xStatus = 2
+			and ets.xDataType=3
 		ORDER BY
 			ets.sID DESC
 		

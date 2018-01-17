@@ -9,6 +9,8 @@
             template="com/artwellhk/alertsystem/web/alertsnooze/alert-snooze-browse.xml"/>
     <screen id="alertsystem$Alert.browse"
             template="com/artwellhk/alertsystem/web/alert/alert-browse.xml"/>
-    <screen id="alertsystem$TestEntity.browse"
-            template="com/artwellhk/alertsystem/web/testentity/test-entity-browse.xml"/>
+    <screen id="alertsystem$AlertSnooze.edit"
+            template="com/artwellhk/alertsystem/web/alertsnooze/alert-snooze-edit.xml"/>
+    <screen id="alertsystem$AlertSnooze2.edit"
+            template="com/artwellhk/alertsystem/web/alertsnooze/alert-snooze2-edit.xml"/>
 </screen-config>

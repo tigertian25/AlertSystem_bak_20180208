@@ -1,6 +1,6 @@
 -- begin ALERTSYSTEM_ALERT_SNOOZE
 create table ALERTSYSTEM_ALERT_SNOOZE (
-    ID integer,
+    ID uniqueidentifier,
     CREATE_TS datetime,
     CREATED_BY varchar(50),
     --
@@ -8,7 +8,7 @@ create table ALERTSYSTEM_ALERT_SNOOZE (
     ALERT_TYPE_ID integer,
     DURATION integer,
     --
-    primary key (ID)
+    primary key nonclustered (ID)
 )^
 -- end ALERTSYSTEM_ALERT_SNOOZE
 -- begin ALERTSYSTEM_ALERT_TYPE

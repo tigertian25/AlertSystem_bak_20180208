@@ -6,6 +6,5 @@
         <item screen="alertsystem$AlertType.browse"/>
         <item screen="alertsystem$AlertSnooze.browse"/>
         <item screen="alertsystem$Alert.browse"/>
-        <item screen="alertsystem$TestEntity.browse"/>
     </menu>
 </menu-config>

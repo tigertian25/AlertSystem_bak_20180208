@@ -102,33 +102,16 @@ public class AlertType extends BaseIntegerIdEntity {
     }
 
     public AlertType(int id, Process fromProcess,Process toProcess,Integer allowedDuration,Integer fromProcessType,Integer toProcessType) {
-    	this.id=id;this.fromProcess=fromProcess;this.toProcess=toProcess;this.allowedDuration=allowedDuration;
+    	this.id=id;this.allowedDuration=allowedDuration;
     	this.fromProcessType=fromProcessType;this.toProcessType=toProcessType;
-    	if(fromProcessType==1) {
-    		this.fromProcess.name=this.fromProcess.name+"发出";
-    	}else if(fromProcessType==2) {
-    		this.fromProcess.name=this.fromProcess.name+"收回";
-    	}
-    	if(toProcessType==1) {
-    		this.toProcess.name=this.toProcess.name+"发出";
-    	}else if(toProcessType==2) {
-    		this.toProcess.name=this.toProcess.name+"收回";
-    	}
+    	this.fromProcess=fromProcess;this.toProcess=toProcess;
 	}
     public AlertType(int id, Process fromProcess,Process toProcess,Integer allowedDuration,Integer fromProcessType,Integer toProcessType,Integer singleMaxDuration,Integer totalMaxDuration) {
-    	this.id=id;this.fromProcess=fromProcess;this.toProcess=toProcess;this.allowedDuration=allowedDuration;
+    	this.id=id;this.allowedDuration=allowedDuration;
     	this.singleMaxDuration=singleMaxDuration;this.totalMaxDuration=totalMaxDuration;
     	this.fromProcessType=fromProcessType;this.toProcessType=toProcessType;
-    	if(fromProcessType==1) {
-    		this.fromProcess.name=this.fromProcess.name+"发出";
-    	}else if(fromProcessType==2) {
-    		this.fromProcess.name=this.fromProcess.name+"收回";
-    	}
-    	if(toProcessType==1) {
-    		this.toProcess.name=this.toProcess.name+"发出";
-    	}else if(toProcessType==2) {
-    		this.toProcess.name=this.toProcess.name+"收回";
-    	}
+    	this.fromProcess=fromProcess;
+    	this.toProcess=toProcess;
     }
 
 	public AlertType() {

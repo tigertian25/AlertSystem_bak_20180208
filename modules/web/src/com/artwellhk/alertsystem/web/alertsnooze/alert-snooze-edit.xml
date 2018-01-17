@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="com.artwellhk.alertsystem.web.alertsnooze.AlertSnoozeEdit"
+        datasource="alertSnoozeDs"
+        focusComponent="fieldGroup"
+        messagesPack="com.artwellhk.alertsystem.web.alertsnooze">
+    <dsContext>
+        <datasource id="alertSnoozeDs"
+                    class="com.artwellhk.alertsystem.entity.AlertSnooze"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="alertSnoozeDs"
+                    width="100%">
+                     
+            <column width="250px">
+                <field property="sampleOrderId"/>
+                <field property="alertType.id"  caption="typeID"/>
+                <field property="duration"  caption="睡眠时间"/>
+            </column>
+        </fieldGroup>
+        <buttonsPanel id="buttonsPanel"
+                      alwaysVisible="true">
+            <button id="editStatusButton"
+                    caption="设置睡眠"
+                    invoke="onEditStatusButtonClick"/>
+            <button id="button_1"
+                    caption="取消"
+                    invoke="onButton_1Click"/>
+        </buttonsPanel>
+    </layout>
+</window> -->
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="com.artwellhk.alertsystem.web.alertsnooze.AlertSnoozeEdit"
+        datasource="alertSnoozeDs"
+        focusComponent="fieldGroup"
+        messagesPack="com.artwellhk.alertsystem.web.alertsnooze">
+    <dsContext>
+        <datasource id="alertSnoozeDs"
+                    class="com.artwellhk.alertsystem.entity.AlertSnooze"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="alertSnoozeDs">
+            <column width="250px">
+                <field property="sampleOrderId" caption="styleID"/>
+                <field property="duration" caption="睡眠时间"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

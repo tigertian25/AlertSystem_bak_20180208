@@ -29,6 +29,7 @@ public class SampleOrder extends BaseIntegerIdEntity {
     @MetaProperty
     protected Date gongYiReceiveTime;
 
+
     public Date getGonYiSendTime() {
         return gonYiSendTime;
     }
