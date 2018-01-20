@@ -92,6 +92,7 @@ public class AlertServiceBean implements AlertService {
 							if (now.getTime() > snoozeTime.getTime()&&(now.getTime()-snoozeTime.getTime())>1000) {// 褰撳墠鏃堕棿澶т簬鐫＄湢鍚庣殑鏃堕棿
 								timeDifference = util.dateUtil(now, snoozeTime);
 								alert.setTimeDifference(timeDifference);
+								setAlertTypeProcessInfo(alert.getAlertType());
 								returnAlertList.add(alert);
 								continue;
 							}
@@ -100,6 +101,7 @@ public class AlertServiceBean implements AlertService {
 
 							timeDifference = util.dateUtil(now, lastTimestamp);
 							alert.setTimeDifference(timeDifference);
+							setAlertTypeProcessInfo(alert.getAlertType());
 							returnAlertList.add(alert);
 							continue;
 						}
@@ -114,6 +116,19 @@ public class AlertServiceBean implements AlertService {
 		}
 		log.debug("returnAlertList:"+gson.toJson(returnAlertList));
 		return returnAlertList;
+
+	}
+	private void setAlertTypeProcessInfo(AlertType alertType) {
+		String fromInfo="发出";
+		String toInfo="发出";
+		if(2==alertType.getFromProcessType().getId()) {
+			fromInfo="收回";
+		}
+		if(2==alertType.getToProcessType().getId()) {
+			toInfo="收回";
+		}
+		alertType.setFromProcessInfo(alertType.getFromProcess().getName()+fromInfo);
+		alertType.setToProcessInfo(alertType.getToProcess().getName()+toInfo);
 
 	}
 

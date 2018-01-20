@@ -25,7 +25,7 @@ public class AlertBrowse extends AbstractWindow {
 
 	@Override
 	public void init(Map<String, Object> params) {
-		alertsDs.setMaxResults(50);// 一页锟斤拷示锟斤拷锟斤拷锟斤拷锟斤拷录
+		//alertsDs.setMaxResults(50);// 一页锟斤拷示锟斤拷锟斤拷锟斤拷锟斤拷录
 	}
 
 	@Inject

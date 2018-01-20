@@ -17,9 +17,10 @@
         <groupDatasource id="alertTypesDs"
                          class="com.artwellhk.alertsystem.entity.AlertType"
                          view="alertType-view">
-            <query>
+           
+             <query>
                 <![CDATA[select e from alertsystem$AlertType e]]>
-            </query>
+            </query> 
         </groupDatasource>
     </dsContext>
     <actions>

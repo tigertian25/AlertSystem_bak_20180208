@@ -2,6 +2,7 @@ package com.artwellhk.alertsystem.web.alertsnooze;
 
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.Window;
+import com.haulmont.cuba.gui.data.DsContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,4 +41,5 @@ public class AlertSnoozeEdit extends AbstractEditor<AlertSnooze> {
     public void onButton_1Click() {
     	 close(Window.CLOSE_ACTION_ID);
     }*/
+	
 }

@@ -44,5 +44,5 @@
 		<property name="dataSource" ref="cubaDataSource_ERPDB" />
 		<qualifier type="org.springframework.beans.factory.annotation.Qualifier"
 			value="ERPDB" />
-	</bean>
+	</bean> 
 </beans>

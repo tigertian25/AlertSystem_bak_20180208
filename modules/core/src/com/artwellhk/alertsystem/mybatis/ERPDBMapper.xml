@@ -47,6 +47,7 @@
 		WHERE
 			ets.xStatus = 2
 			and ets.xDataType=3
+			<!-- AND DATEDIFF(dd, ets.xDate2, GETDATE()) > 100 -->
 		ORDER BY
 			ets.sID DESC
 		
@@ -124,6 +125,5 @@
 			) + '%'
 		ORDER BY iss.sID DESC
 	</select>
-
 	
 </mapper>

@@ -10,7 +10,11 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.chile.core.annotations.MetaProperty;
+import javax.persistence.Transient;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 
+@Listeners("alertsystem_AlertTypeEntityListener")
 @NamePattern("%s %s %s|fromProcess,toProcess,allowedDuration")
 @Table(name = "ALERTSYSTEM_ALERT_TYPE")
 @Entity(name = "alertsystem$AlertType")
@@ -20,6 +24,14 @@ public class AlertType extends BaseIntegerIdEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FROM_PROCESS_ID")
     protected Process fromProcess;
+
+    @Transient
+    @MetaProperty
+    protected String fromProcessInfo;
+
+    @Transient
+    @MetaProperty
+    protected String toProcessInfo;
 
     @Column(name = "FROM_PROCESS_TYPE", nullable = false)
     protected Integer fromProcessType;
@@ -39,6 +51,23 @@ public class AlertType extends BaseIntegerIdEntity {
 
     @Column(name = "TOTAL_MAX_DURATION")
     protected Integer totalMaxDuration;
+
+    public void setFromProcessInfo(String fromProcessInfo) {
+        this.fromProcessInfo = fromProcessInfo;
+    }
+
+    public String getFromProcessInfo() {
+        return fromProcessInfo;
+    }
+
+    public void setToProcessInfo(String toProcessInfo) {
+        this.toProcessInfo = toProcessInfo;
+    }
+
+    public String getToProcessInfo() {
+        return toProcessInfo;
+    }
+
 
     public ProcessType getToProcessType() {
         return toProcessType == null ? null : ProcessType.fromId(toProcessType);

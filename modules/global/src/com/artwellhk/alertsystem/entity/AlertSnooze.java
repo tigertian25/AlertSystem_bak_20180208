@@ -12,7 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 
+@Listeners("alertsystem_AlertSnoozeEntityListener")
 @NamePattern("%s|duration")
 @Table(name = "ALERTSYSTEM_ALERT_SNOOZE")
 @Entity(name = "alertsystem$AlertSnooze")
