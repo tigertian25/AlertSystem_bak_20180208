@@ -17,10 +17,9 @@
         <groupDatasource id="alertTypesDs"
                          class="com.artwellhk.alertsystem.entity.AlertType"
                          view="alertType-view">
-           
-             <query>
+            <query>
                 <![CDATA[select e from alertsystem$AlertType e]]>
-            </query> 
+            </query>
         </groupDatasource>
     </dsContext>
     <actions>
@@ -62,14 +61,21 @@
                     </actions>
                     <columns>
                         <column id="fromProcess"
-                                caption="fromProcess"/>
-                        <column id="fromProcessType"/>
+                                caption="开始工序"/>
+                        <column id="fromProcessType"
+                                caption="工序类型"/>
                         <column id="toProcess"
-                                caption="fromProcess"/>
-                        <column id="toProcessType"/>
-                        <column id="allowedDuration"/>
-                        <column id="singleMaxDuration"/>
-                        <column id="totalMaxDuration"/>
+                                caption="下一工序"/>
+                        <column id="toProcessType"
+                                caption="下一工序类型"/>
+                        <column id="allowedDuration"
+                                caption="规定时限">
+                            <formatter class="com.artwellhk.alertsystem.web.alerttype.MyFormatter"/>
+                        </column>
+                        <column id="singleMaxDuration"
+                                caption="单次输入最大时限"/>
+                        <column id="totalMaxDuration"
+                                caption="最大总时限"/>
                     </columns>
                     <rows datasource="alertTypesDs"/>
                     <rowsCount/>
@@ -93,13 +99,13 @@
                     <fieldGroup id="fieldGroup"
                                 datasource="alertTypeDs">
                         <column width="250px">
-                            <field property="fromProcess"/>
-                            <field property="fromProcessType"/>
-                            <field property="toProcess"/>
-                            <field property="toProcessType"/>
-                            <field property="allowedDuration"/>
-                            <field property="singleMaxDuration"/>
-                            <field property="totalMaxDuration"/>
+                            <field property="fromProcess" caption="开始工序"/>
+                            <field property="fromProcessType" caption="工序类型"/>
+                            <field property="toProcess" caption="下一工序"/>
+                            <field property="toProcessType" caption="下一工序类型"/>
+                            <field property="allowedDuration" caption="规定时限"/>
+                            <field property="singleMaxDuration" caption="单次输入最大时限"/>
+                            <field property="totalMaxDuration"  caption="最大总时限"/>
                         </column>
                     </fieldGroup>
                 </vbox>

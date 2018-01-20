@@ -60,8 +60,10 @@
                         <action id="remove"/>
                     </actions>
                     <columns>
-                        <column id="name"/>
-                        <column id="zt_working_id"/>
+                        <column id="name"
+                                caption="工序名称"/>
+                        <column id="zt_working_id"
+                                caption="对应ERPDB表zt_working的id"/>
                     </columns>
                     <rows datasource="processesDs"/>
                     <rowsCount/>
@@ -85,8 +87,8 @@
                     <fieldGroup id="fieldGroup"
                                 datasource="processDs">
                         <column width="250px">
-                            <field property="name"/>
-                            <field property="zt_working_id"/>
+                            <field property="name"  caption="工序名称"/>
+                            <field property="zt_working_id" caption="对应ERPDB表zt_working的id"/>
                         </column>
                     </fieldGroup>
                 </vbox>
