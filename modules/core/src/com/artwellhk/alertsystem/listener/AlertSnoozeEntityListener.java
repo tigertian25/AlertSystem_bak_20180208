@@ -11,6 +11,7 @@ public class AlertSnoozeEntityListener implements BeforeInsertEntityListener<Ale
 
     @Override
     public void onBeforeInsert(AlertSnooze entity, EntityManager entityManager) {
+    	
     	entity.setDuration(entity.getDuration()*60*1000);//分钟转化成毫秒
     }
 

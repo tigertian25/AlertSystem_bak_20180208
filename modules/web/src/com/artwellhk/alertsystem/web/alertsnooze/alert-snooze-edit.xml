@@ -57,7 +57,7 @@
                 <field caption="styleID"
                        editable="false"
                        property="sampleOrderId"/>
-                <field caption="睡眠时间"
+                <field caption="睡眠时间（分钟）"
                        property="duration"/>
             </column>
         </fieldGroup>

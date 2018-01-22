@@ -190,7 +190,7 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 		
 		Alert alert = null;
 		if (null != alertType) {
-			System.out.println("getAllowedDuration:"+alertType.getAllowedDuration());
+			
 			if (dataType == 1) {// 宸ヨ壓鏈敹鍥�
 				alert = new Alert(alertType, sampleOrder);
 				alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());

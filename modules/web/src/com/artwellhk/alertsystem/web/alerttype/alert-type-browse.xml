@@ -69,13 +69,15 @@
                         <column id="toProcessType"
                                 caption="下一工序类型"/>
                         <column id="allowedDuration"
-                                caption="规定时限">
+                                caption="规定时限（分钟）">
                             <formatter class="com.artwellhk.alertsystem.web.alerttype.MyFormatter"/>
                         </column>
                         <column id="singleMaxDuration"
-                                caption="单次输入最大时限"/>
+                                caption="单次输入最大时限"
+                                visible="false"/>
                         <column id="totalMaxDuration"
-                                caption="最大总时限"/>
+                                caption="最大总时限"
+                                visible="false"/>
                     </columns>
                     <rows datasource="alertTypesDs"/>
                     <rowsCount/>
@@ -99,13 +101,22 @@
                     <fieldGroup id="fieldGroup"
                                 datasource="alertTypeDs">
                         <column width="250px">
-                            <field property="fromProcess" caption="开始工序"/>
-                            <field property="fromProcessType" caption="工序类型"/>
-                            <field property="toProcess" caption="下一工序"/>
-                            <field property="toProcessType" caption="下一工序类型"/>
-                            <field property="allowedDuration" caption="规定时限"/>
-                            <field property="singleMaxDuration" caption="单次输入最大时限"/>
-                            <field property="totalMaxDuration"  caption="最大总时限"/>
+                            <field caption="开始工序"
+                                   property="fromProcess"/>
+                            <field caption="工序类型"
+                                   property="fromProcessType"/>
+                            <field caption="下一工序"
+                                   property="toProcess"/>
+                            <field caption="下一工序类型"
+                                   property="toProcessType"/>
+                            <field caption="规定时限（分钟）"
+                                   property="allowedDuration"/>
+                            <field caption="单次输入最大时限"
+                                   property="singleMaxDuration"
+                                   visible="false"/>
+                            <field caption="最大总时限"
+                                   property="totalMaxDuration"
+                                   visible="false"/>
                         </column>
                     </fieldGroup>
                 </vbox>
