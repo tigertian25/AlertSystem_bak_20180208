@@ -61,9 +61,9 @@
                     </actions>
                     <columns>
                         <column id="name"
-                                caption="工序名称"/>
-                        <column id="zt_working_id"
-                                caption="对应ERPDB表zt_working的id"/>
+                                caption="名称"/>
+                        <column id="deptId"
+                                caption="部门ID"/>
                     </columns>
                     <rows datasource="processesDs"/>
                     <rowsCount/>
@@ -87,8 +87,10 @@
                     <fieldGroup id="fieldGroup"
                                 datasource="processDs">
                         <column width="250px">
-                            <field property="name"  caption="工序名称"/>
-                            <field property="zt_working_id" caption="对应ERPDB表zt_working的id"/>
+                            <field caption="名称"
+                                   property="name"/>
+                            <field caption="部门ID"
+                                   property="deptId"/>
                         </column>
                     </fieldGroup>
                 </vbox>

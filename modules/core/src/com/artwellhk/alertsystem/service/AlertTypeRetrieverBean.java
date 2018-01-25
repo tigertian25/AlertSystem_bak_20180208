@@ -1,8 +1,11 @@
 package com.artwellhk.alertsystem.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +22,8 @@ import com.artwellhk.alertsystem.entity.Alert;
 import com.artwellhk.alertsystem.entity.AlertType;
 import com.artwellhk.alertsystem.entity.AlertTypeID;
 import com.artwellhk.alertsystem.entity.Process;
+import com.artwellhk.alertsystem.entity.ProcessIdEnum;
+import com.artwellhk.alertsystem.entity.ProcessType;
 import com.artwellhk.alertsystem.entity.SampleOrder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,153 +40,233 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 
 	@Override
 	public List<Alert> retrieveList(List<SampleOrder> sampleOrderList) {
-		List<Alert> alertList = new ArrayList<>();
+		List<Alert> alertList =  new LinkedList<Alert>();
 		if (sampleOrderList.size() > 0) {
-			// 瀛樻斁涓存椂鏁版嵁
+			
 
-			Object obj = null;// 褰撳墠宸ュ簭
-			Object objNext = null;// 涓嬩竴宸ュ簭
-			// 寰幆sampleOrderList
+			Object obj = null;// 当前工序
+			Object objNext = null;// 下一工序
+			// 循环sampleOrderList
+			Long stratTime =null; 
+//			Long endTime = System.currentTimeMillis();
+//			int i=1;
+			Long stratTime_for = System.currentTimeMillis();
+		
 			for (SampleOrder sampleOrder : sampleOrderList) {
-				// 宸ヨ壓鏈彂鍑�
+				
+//				stratTime= endTime;
+//				endTime= System.currentTimeMillis();
+//				
+//				System.out.println("第"+i+"次循环耗时："+(endTime - stratTime));
+//				i+=1;
+				// 当前工序为空
 				obj = null;
 
 				Map<String, Object> parameter = new HashMap<>();
-				// parameter.put("styleID", 531410628);
 				parameter.put("styleID", sampleOrder.getId());
 
-				// 宸ヨ壓鏈敹鍥�
+				// 工艺未收回：isReceive=1表示未收回，2表示已收回
 				if (sampleOrder.getIsReceive() == 1) {
-					Alert alert = calculatorAlert(sampleOrder, null, AlertTypeID.GongYiNoReceive.getId(), 1);
-					if (null != alert) {
+//					Alert alert = calculatorAlert(sampleOrder, null, AlertTypeID.GongYiNoReceive.getId(), 1);
+//					
+//					if (null != alert) {
+//						alertList.add(alert);
+//					}
+					AlertType alertType=getAlertType(ProcessIdEnum.GongYi.getId(), ProcessType.send.getId());
+					if(null!=alertType) {
+						Alert alert = new Alert(alertType, sampleOrder);
+						alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
+						alert.setFromTimestamp(sampleOrder.getGonYiSendTime());
 						alertList.add(alert);
 					}
 					continue;
 				}
-				// 鐢昏姳鏈彂鍑�
-				// obj = objNext;
+				// 判断画花的发出和收回
 				objNext = selectOneMapByOParameter("ERPDBMapper.getHuaHuaSend", parameter);
-				if (null == objNext) {
-					Alert alert = calculatorAlert(sampleOrder, null, AlertTypeID.HuaHuaNoSend.getId(), 2);
-					if (null != alert) {
+				if (null == objNext) {//画花未发出
+//					Alert alert = calculatorAlert(sampleOrder, null, AlertTypeID.HuaHuaNoSend.getId(), 2);
+//					if (null != alert) {
+//						alertList.add(alert);
+//					}
+					AlertType alertType=getAlertType(ProcessIdEnum.GongYi.getId(), ProcessType.receive.getId());
+					if(null!=alertType) {
+						Alert alert = new Alert(alertType, sampleOrder);
+						alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
+						alert.setFromTimestamp(sampleOrder.getGongYiReceiveTime());
 						alertList.add(alert);
 					}
 					continue;
-				}
-				// 鍒ゆ柇鏄惁鐢昏姳鏀跺洖
-				obj = objNext;
-				objNext = selectOneMapByOParameter("ERPDBMapper.getHuaHuaReceive", parameter);
-				if (null == objNext) {
-					Alert alert = calculatorAlert(sampleOrder, (Map<String, Object>) obj,
-							AlertTypeID.HuaHuaNoReceive.getId(), 3);
-					if (null != alert) {
-						alertList.add(alert);
+				}else {//画花已发出
+					obj = objNext;//当前工序为画花已发出
+					Map<String, Object> huahua=(Map<String, Object>) obj;
+					int huahuaIsReceive=Integer.parseInt(huahua.get("isReceive").toString());
+					if(huahuaIsReceive==1) {//isReceive=1表示未收回，2表示已收回
+//						Alert alert = calculatorAlert(sampleOrder, (Map<String, Object>) obj,
+//								AlertTypeID.HuaHuaNoReceive.getId(), 3);
+//						if (null != alert) {
+//							alertList.add(alert);
+//						}
+						AlertType alertType=getAlertType(ProcessIdEnum.HuaHua.getId(), ProcessType.send.getId());
+						if(null!=alertType) {
+							Alert alert = new Alert(alertType, sampleOrder);
+							alert = new Alert(alertType, (Date)huahua.get("fromTimestamp"), sampleOrder,
+									huahua.get("employeeName").toString());
+							alertList.add(alert);
+						}
+						continue;
 					}
-					continue;
-				}
+					//画花已收回，toTimestamp变成fromTimestamp
+//					huahua.put("fromTimestamp", huahua.get("toTimestamp").toString());
+//					obj=huahua;
+//				}
+//				// 鍒ゆ柇鏄惁鐢昏姳鏀跺洖
+//				obj = objNext;
+//				objNext = selectOneMapByOParameter("ERPDBMapper.getHuaHuaReceive", parameter);
+//				if (null == objNext) {
+//					Alert alert = calculatorAlert(sampleOrder, (Map<String, Object>) obj,
+//							AlertTypeID.HuaHuaNoReceive.getId(), 3);
+//					if (null != alert) {
+//						alertList.add(alert);
+//					}
+//					continue;
+//				}
 				
 				/**
 				 * 鏌ヨ鐢垫満閮ㄥ強鍚庨潰宸ュ簭鐨勫彂鍑鸿褰�(鏌ヨ鏈�鏂颁竴鏉℃敹鍥炶褰�) 锛宨f(iss.*涓虹┖){琛ㄧず鐢垫満閮ㄦ湭鍙戝嚭}else
 				 * if(issbc.aStatus=1){鏄湭鏀跺洖}else if(issbc.aStatus=3){宸叉敹鍥烇紝
 				 * if(鏀跺洖鐨勫伐搴忎笉鏄渶鍚庡伐搴�){杩斿洖鏀跺洖鏃堕棿}}
 				 */
-				obj = objNext;
-				objNext = selectOneMapByOParameter("ERPDBMapper.getIssue60ByStyleID", parameter);// 鏈�杩戜竴涓彂鍑虹殑宸ュ簭
-				if (null == objNext) {// 琛ㄧず鐢昏姳鏀跺洖鍚庢病宸ュ簭鍙戝嚭鍗� 鐢垫満鏈彂鍑�
-					Alert alert = calculatorAlert(sampleOrder, (Map<String, Object>) obj,
-							AlertTypeID.DianJiNoSend.getId(), 3);
-					if (null != alert) {
+				//obj = objNext;
+				objNext = selectOneMapByOParameter("ERPDBMapper.getIssue60ByStyleID", parameter);// 查询最后收发时间
+				if (null == objNext) {// 表示电机未发出
+//					Alert alert = calculatorAlert(sampleOrder, (Map<String, Object>) obj,
+//							AlertTypeID.DianJiNoSend.getId(), 3);
+//					if (null != alert) {
+//						alertList.add(alert);
+//					}
+					AlertType alertType=getAlertType(ProcessIdEnum.HuaHua.getId(), ProcessType.receive.getId());
+					if(null!=alertType) {
+						Alert alert = new Alert(alertType, sampleOrder);
+						alert = new Alert(alertType, (Date) huahua.get("toTimestamp"), sampleOrder,
+								huahua.get("employeeName").toString());
 						alertList.add(alert);
 					}
 					continue;
-				} else {// 鏈�杩戝彂鍑虹殑宸ュ簭
+				} else {// 有工序发出
 					obj = objNext;
-					Map<String, Object> map = (Map<String, Object>) obj;// 鏈�杩戝彂鍑虹殑宸ュ簭
+					Map<String, Object> map = (Map<String, Object>) obj;// 当前工序
 					Process process = null;
-					try (Transaction tx = persistence.createTransaction()) {// 鏌ヨ鏈�杩戝彂鍑虹殑宸ュ簭鏄粈涔堝伐搴�
+					try (Transaction tx = persistence.createTransaction()) {// 根据deptId查出当前发出工序是什么
 						EntityManager em = persistence.getEntityManager();
-						process = (Process) em
-								.createQuery(
-										"select o from alertsystem$Process o where o.zt_working_id = :zt_working_id")
-								.setParameter("zt_working_id", map.get("sendWorkId")).getSingleResult();
+						process = (Process) em.createQuery(
+										"select o from alertsystem$Process o where o.deptId = :deptId")
+								.setParameter("deptId", map.get("deptId")).getFirstResult();
 						tx.commit();
 					} catch (NoResultException e) {
 						e.printStackTrace();
 						return null;
 					}
-					if (null != process && "1".equals(map.get("aStatus").toString())) {// aStatus=1琛ㄧず褰撳墠宸ュ簭鍙戝嚭鏈敹鍥�
+					if (null != process && "1".equals(map.get("aStatus").toString())) {// aStatus=1当前工序发出未收回
 
-						// 鍒ゆ柇褰撳墠宸ュ簭鏄粈涔�
+						// 根据当前工序的process.getId()查询AlertType
 						AlertType alertType = null;
 						try (Transaction tx = persistence.createTransaction()) {
 							EntityManager em = persistence.getEntityManager();
 							alertType = (AlertType) em.createQuery(
-									"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t where"
-											+ " f.id= :id")
-									.setParameter("id", process.getId()).getSingleResult();
+									"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t where a.fromProcessType="+ProcessType.send.getId()
+											+ " and f.id= :id")
+									.setParameter("id", process.getId()).getFirstResult();
 							tx.commit();
 						} catch (NoResultException e) {
 							return null;
 						}
+						
 						if (null != alertType) {
-							Alert alert = new Alert(alertType, util.stringToDate(map.get("sendTime").toString()),
+							Alert alert = new Alert(alertType, (Date)map.get("sendTime"),
 									sampleOrder, map.get("sendEmployee").toString());
 							alertList.add(alert);
 						}
 						continue;
 					}
-					if (null != process && "3".equals(map.get("aStatus").toString())) {// aStatus=3琛ㄧず褰撳墠宸ュ簭宸叉敹鍥烇紝涓嬩竴宸ュ簭鏈彂鍑�
-						// 鍒ゆ柇褰撳墠宸ュ簭鏄惁鏈渶鍚庡伐搴�
+					if (null != process && "3".equals(map.get("aStatus").toString())) {// aStatus=3当前工序发出并已经收回
+						// 查询下一工序
 						AlertType alertType = null;
-						try (Transaction tx = persistence.createTransaction()) {
-							EntityManager em = persistence.getEntityManager();
-							alertType = (AlertType) em.createQuery(
-									"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t "
-											+ "  order by a.id desc")
-									.getFirstResult();// 鑾峰彇鏈�鍚庝竴涓猘lertType
-							tx.commit();
-						} catch (NoResultException e) {
-							return null;
-						}
-						// 姣旇緝鏈�鍚庝竴涓猘lertType鐨勬敹鍥炲伐搴忎笌褰撳墠鏀跺洖宸ュ簭鏄惁鐩哥瓑
-						if (null != alertType && alertType.getFromProcess().getId() != process.getId()) {// 琛ㄧず褰撳墠宸ュ簭涓嶆槸鏈�鍚庡伐搴�
+//						try (Transaction tx = persistence.createTransaction()) {
+//							EntityManager em = persistence.getEntityManager();
+//							alertType = (AlertType) em.createQuery(
+//									"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t "
+//											+ "  order by a.id desc")
+//									.getFirstResult();// 鑾峰彇鏈�鍚庝竴涓猘lertType
+//							tx.commit();
+//						} catch (NoResultException e) {
+//							return null;
+//						}
+						// 查询下一工序
+//						if (null != alertType && alertType.getFromProcess().getId() != process.getId()) {// 琛ㄧず褰撳墠宸ュ簭涓嶆槸鏈�鍚庡伐搴�
+						System.out.println(gson.toJson(process));
 							try (Transaction tx = persistence.createTransaction()) {
 								EntityManager em = persistence.getEntityManager();
 								alertType = (AlertType) em.createQuery(
-										"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t where"
-												+ " f.id= :id order by a.id desc")
+										"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t where a.fromProcessType="+ProcessType.receive.getId()
+												+ " and f.id= :id order by a.id desc")
 										.setParameter("id", process.getId()).getFirstResult();
 								tx.commit();
 							} catch (NoResultException e) {
 								return null;
 							}
-							if (null != alertType) {
-								Alert alert = new Alert(alertType, util.stringToDate(map.get("receiveTime").toString()),
+							if (null != alertType) {//表示有下一工序，即当前工序不是最后工序
+								Alert alert = new Alert(alertType, (Date)map.get("receiveTime"),
 										sampleOrder, map.get("receiveName").toString());
 								alertList.add(alert);
 							}
 							continue;
-						}
+//						}
 					}
 				}
-
 			}
+				
+			}
+			Long endTime_for = System.currentTimeMillis();
+			System.out.println("forTime："+(endTime_for - stratTime_for));
+			
 		}
 		//System.out.println("--retrieveList:"+gson.toJson(alertList));
 		return alertList;
 	}
+	private AlertType getAlertType(int fromProcessId,int fromProcessType) {
+		AlertType alertType = null;
+		try (Transaction tx = persistence.createTransaction()) {
+			EntityManager em = persistence.getEntityManager();
+			alertType = (AlertType) em.createQuery(
+					"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t where"
+							+ " f.id= :fromProcessId"
+							+ " and a.fromProcessType=:fromProcessType"
+							)
+					.setParameter("fromProcessId", fromProcessId)
+					.setParameter("fromProcessType", fromProcessType)
+					.getSingleResult();
+			tx.commit();
+		} catch (NoResultException e) {
+			return null;
+		}
+		return alertType;
+		
+	}
+	
 
 	/*
 	 * dataType:1宸ヨ壓鏈敹鍥烇紝2鐢昏姳鏈彂鍑猴紝3鍏朵粬
 	 */
-	private Alert calculatorAlert(SampleOrder sampleOrder, Map<String, Object> map, int alertTypeID, int dataType) {
+	/*private Alert calculatorAlert(SampleOrder sampleOrder, Map<String, Object> map, int alertTypeID, int dataType) {
 		
 		AlertType alertType = null;
 		try (Transaction tx = persistence.createTransaction()) {
 			EntityManager em = persistence.getEntityManager();
 			alertType = (AlertType) em.createQuery(
 					"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t where"
-							+ " a.id= :id")
+							+ " f.id= :id"
+							+ "and fromProcessType="
+							)
 					.setParameter("id", alertTypeID).getSingleResult();
 			tx.commit();
 		} catch (NoResultException e) {
@@ -191,22 +276,34 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 		Alert alert = null;
 		if (null != alertType) {
 			
-			if (dataType == 1) {// 宸ヨ壓鏈敹鍥�
+			if (dataType == 1) {//工艺未收回
 				alert = new Alert(alertType, sampleOrder);
 				alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
 				alert.setFromTimestamp(sampleOrder.getGonYiSendTime());
-			} else if (dataType == 2) {// 鐢昏姳鏈彂鍑�
+			} else if (dataType == 2) {//画花未发出
 				alert = new Alert(alertType, sampleOrder);
 				alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
 				alert.setFromTimestamp(sampleOrder.getGongYiReceiveTime());
-			} else {
+			} 
+//			else if (dataType == 3) {//画花未收回
+//				alert = new Alert(alertType, sampleOrder);
+//				alert.setEmployeeName(map.get("employeeName").toString());
+//				 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//				try {
+//					alert.setFromTimestamp(sdf.parse(map.get("fromTimestamp").toString()));
+//				} catch (ParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+			else {
 				alert = new Alert(alertType, util.stringToDate(map.get("fromTimestamp").toString()), sampleOrder,
 						map.get("employeeName").toString());
 			}
 		}
 		return alert;
 
-	}
+	}*/
 
 	/**
 	 * 

@@ -15,16 +15,17 @@ public class Process extends BaseIntegerIdEntity {
 	@Column(name = "NAME")
 	protected String name;
 
-    @Column(name = "ZT_WORKING_ID")
-    protected Integer zt_working_id;
 
 
-    public void setZt_working_id(Integer zt_working_id) {
-        this.zt_working_id = zt_working_id;
+    @Column(name = "DEPT_ID")
+    protected Integer deptId;
+
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
     }
 
-    public Integer getZt_working_id() {
-        return zt_working_id;
+    public Integer getDeptId() {
+        return deptId;
     }
 
 

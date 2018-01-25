@@ -8,20 +8,11 @@
               password="age5minnow"
               type="javax.sql.DataSource"
               url="jdbc:sqlserver://10.17.0.1;databaseName=ALERTSYSTEM"
-              username="tiger"/>
+              username="tiger"
+              validationQuery="select 1"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>
     <!--Data store 'ERPDB' connection-->
-    <!-- <Resource driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-              maxIdle="2"
-              maxTotal="20"
-              maxWaitMillis="5000"
-              name="jdbc/ERPDB"
-              password="tiger123456"
-              type="javax.sql.DataSource"
-              url="jdbc:sqlserver://localhost;databaseName=ERPDB"
-              username="sa"/> -->
-                <!--Data store 'ERPDB' connection-->
     <Resource driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
               maxIdle="2"
               maxTotal="20"
@@ -31,13 +22,4 @@
               type="javax.sql.DataSource"
               url="jdbc:sqlserver://10.17.0.1;databaseName=ERPDB"
               username="sample_track"/>
-    <!--<Resource driverClassName="org.hsqldb.jdbc.JDBCDriver"
-          maxIdle="2"
-          maxTotal="20"
-          maxWaitMillis="5000"
-          name="jdbc/CubaDS"
-          password=""
-          type="javax.sql.DataSource"
-          url="jdbc:hsqldb:hsql://localhost/alertsystem"
-          username="sa"/>-->
 </Context>

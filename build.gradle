@@ -17,15 +17,14 @@ buildscript {
     }
 }
 
-def globalModule = project(':app-global')
-def coreModule = project(':app-core')
-def guiModule = project(':app-gui')
-def webModule = project(':app-web')
+def globalModule = project(':alertSystem-global')
+def coreModule = project(':alertSystem-core')
+def guiModule = project(':alertSystem-gui')
+def webModule = project(':alertSystem-web')
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
-apply(plugin: 'idea')
-apply(plugin: 'eclipse')
 apply(plugin: 'java')
+apply(plugin: 'eclipse')
 apply(plugin: 'cuba')
 
 cuba {
@@ -49,9 +48,8 @@ def mssql = 'com.microsoft.sqlserver:mssql-jdbc:6.2.1.jre8'
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-apply(plugin: 'idea')
-apply(plugin: 'eclipse')
-apply(plugin: 'cuba')
+    apply(plugin: 'eclipse')
+    apply(plugin: 'cuba')
 
     dependencies {
         testCompile('junit:junit:4.12')
@@ -90,7 +88,7 @@ configure(coreModule) {
 
     task cleanConf(description: 'Cleans up conf directory') {
         doLast {
-            def dir = new File(cuba.tomcat.dir, '/conf/app-core')
+            def dir = new File(cuba.tomcat.dir, '/conf/alertSystem-core')
             if (dir.isDirectory()) {
                 ant.delete(includeemptydirs: true) {
                     fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -100,24 +98,24 @@ configure(coreModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'app-core'
-        appJars('app-global', 'app-core')
+        appName = 'alertSystem-core'
+        appJars('alertSystem-global', 'alertSystem-core')
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'mssql'
-        host = '10.52.0.52'
-        dbName = 'alertsystem'
-        dbUser = 'sa'
-        dbPassword = 'tiger123456'
+        host = '10.17.0.1'
+        dbName = 'ALERTSYSTEM'
+        dbUser = 'tiger'
+        dbPassword = 'age5minnow'
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbms = 'mssql'
-        host = '10.52.0.52'
-        dbName = 'alertsystem'
-        dbUser = 'sa'
-        dbPassword = 'tiger123456'
+        host = '10.17.0.1'
+        dbName = 'ALERTSYSTEM'
+        dbUser = 'tiger'
+        dbPassword = 'age5minnow'
     }
 }
 
@@ -130,7 +128,7 @@ configure(guiModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/artwellhk/alertsystem/**"
-        into "$cuba.tomcat.dir/conf/app"
+        into "$cuba.tomcat.dir/conf/alertSystem"
     }
 }
 
@@ -158,17 +156,17 @@ configure(webModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/artwellhk/alertsystem/**"
-        into "$cuba.tomcat.dir/conf/app"
+        into "$cuba.tomcat.dir/conf/alertSystem"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
-        appName = 'app'
+        appName = 'alertSystem'
     }
     deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') {
         doLast {
-            def dir = new File(cuba.tomcat.dir, '/conf/app')
+            def dir = new File(cuba.tomcat.dir, '/conf/alertSystem')
             if (dir.isDirectory()) {
                 ant.delete(includeemptydirs: true) {
                     fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -178,8 +176,8 @@ configure(webModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'app'
-        appJars('app-global', 'app-gui', 'app-web')
+        appName = 'alertSystem'
+        appJars('alertSystem-global', 'alertSystem-gui', 'alertSystem-web')
     }
 }
 
@@ -187,13 +185,13 @@ configure(webModule) {
 
 
 
-task undeploy(type: Delete, dependsOn: ':app-web:cleanConf') {
+task undeploy(type: Delete, dependsOn: ':alertSystem-web:cleanConf') {
     delete("$cuba.tomcat.dir/shared")
-    delete("$cuba.tomcat.dir/webapps/app-core")
-    delete("$cuba.tomcat.dir/webapps/app")
+    delete("$cuba.tomcat.dir/webapps/alertSystem-core")
+    delete("$cuba.tomcat.dir/webapps/alertSystem")
 }
 
-task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') {
+task restart(dependsOn: ['stop', ':alertSystem-core:deploy', ':alertSystem-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') {
     doLast {
         ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
             not {
@@ -209,3 +207,12 @@ task wrapper(type: Wrapper) {
 }
 
 apply from: 'extra.gradle'
+
+task buildWar(type: CubaWarBuilding) {
+    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
+    coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate' : true]
+    includeContextXml = true
+    includeJdbcDriver = true
+    appHome = './alertSystem'
+}

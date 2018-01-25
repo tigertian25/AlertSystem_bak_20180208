@@ -3,8 +3,8 @@
 	<classpathentry path="bin" kind="output"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
-	<classpathentry kind="src" path="/AlertSystem-gui"/>
-	<classpathentry kind="src" path="/AlertSystem-global"/>
+	<classpathentry kind="src" path="/alertSystem-gui"/>
+	<classpathentry kind="src" path="/alertSystem-global"/>
 	<classpathentry sourcepath="C:/Users/Admin/.gradle/caches/modules-2/files-2.1/com.haulmont.cuba/cuba-web/6.7.6/989478b5a166d8a52184bdf1af4262f216886d2d/cuba-web-6.7.6-sources.jar" kind="lib" path="C:/Users/Admin/.gradle/caches/modules-2/files-2.1/com.haulmont.cuba/cuba-web/6.7.6/18346d67d3a9f62bbaed70ddf31ec4e34fb8aafa/cuba-web-6.7.6.jar"/>
 	<classpathentry sourcepath="C:/Users/Admin/.gradle/caches/modules-2/files-2.1/com.haulmont.cuba/cuba-gui/6.7.6/b3220ad02f32ce4761694f5f59f80777bcde8e4c/cuba-gui-6.7.6-sources.jar" kind="lib" path="C:/Users/Admin/.gradle/caches/modules-2/files-2.1/com.haulmont.cuba/cuba-gui/6.7.6/f5adaceb0155d280b1d9574e308e787fc367933b/cuba-gui-6.7.6.jar"/>
 	<classpathentry sourcepath="C:/Users/Admin/.gradle/caches/modules-2/files-2.1/com.haulmont.cuba/cuba-shared-lib/6.7.6/e15952833b3145bff3c2ca857513ffb37c8665aa/cuba-shared-lib-6.7.6-sources.jar" kind="lib" path="C:/Users/Admin/.gradle/caches/modules-2/files-2.1/com.haulmont.cuba/cuba-shared-lib/6.7.6/c8f5c3b73a2af1a9d6bfa9b9c24ba44b8c04d0d/cuba-shared-lib-6.7.6.jar"/>

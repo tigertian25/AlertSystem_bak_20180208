@@ -1,7 +1,6 @@
 rootProject.name = 'AlertSystem'
-include(':app-global', ':app-core', ':app-gui', ':app-web')
-project(':app-global').projectDir = new File(settingsDir, 'modules/global')
-project(':app-core').projectDir = new File(settingsDir, 'modules/core')
-project(':app-gui').projectDir = new File(settingsDir, 'modules/gui')
-project(':app-web').projectDir = new File(settingsDir, 'modules/web')
-
+include(':alertSystem-global', ':alertSystem-core', ':alertSystem-gui', ':alertSystem-web')
+project(':alertSystem-global').projectDir = new File(settingsDir, 'modules/global')
+project(':alertSystem-core').projectDir = new File(settingsDir, 'modules/core')
+project(':alertSystem-gui').projectDir = new File(settingsDir, 'modules/gui')
+project(':alertSystem-web').projectDir = new File(settingsDir, 'modules/web')

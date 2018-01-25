@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -114,7 +115,7 @@ public class AlertServiceBean implements AlertService {
 				
 			}
 		}
-		log.debug("returnAlertList:"+gson.toJson(returnAlertList));
+		//log.debug("returnAlertList:"+gson.toJson(returnAlertList));
 		return returnAlertList;
 
 	}
@@ -134,8 +135,8 @@ public class AlertServiceBean implements AlertService {
 
 
 	protected List<Alert> getAlertList() {
-		List<Alert> alertList = new ArrayList<Alert>();
-		List<SampleOrder> sampleOrderList = new ArrayList<>();
+		List<Alert> alertList = new LinkedList<Alert>();
+		List<SampleOrder> sampleOrderList = new LinkedList<SampleOrder>();
 		// 鏌ヨ鎵�鏈夋湭瀹屾垚涓斿伐鑹哄彂鍑烘湭鏀跺洖鐨勭増鍗�
 		
 		Transaction tx = persistence.createTransaction("ERPDB");
