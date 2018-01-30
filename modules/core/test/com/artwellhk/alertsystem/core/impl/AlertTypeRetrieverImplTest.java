@@ -25,10 +25,10 @@ public class AlertTypeRetrieverImplTest extends AlertTypeRetrieverBean {
 	 * 工艺未发出
 	 */
 
-	@Override
-	protected Boolean isGongYiSend() {
-		return false;
-	}
+//	@Override
+//	protected Boolean isGongYiSend() {
+//		return false;
+//	}
 
 	@Override
 	protected Alert gongYiSend(SampleOrder sampleOrder) {

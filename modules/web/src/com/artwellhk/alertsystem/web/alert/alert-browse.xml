@@ -3,9 +3,9 @@
         caption="msg://browseCaption"
         class="com.artwellhk.alertsystem.web.alert.AlertBrowse"
         messagesPack="com.artwellhk.alertsystem.web.alert">
-    <!-- <timers>
+   <timers>
       <timer delay="10000" autostart="true" repeating="true" onTimer="refreshData"/>
-  </timers> -->
+  </timers> 
     <dsContext>
         <collectionDatasource id="alertsDs"
                               allowCommit="false"

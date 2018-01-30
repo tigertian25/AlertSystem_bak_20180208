@@ -43,12 +43,6 @@ public class AlertCalculatorImplTest extends AlertServiceBean {
 	Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	private Logger log = LoggerFactory.getLogger(AlertCalculatorImplTest.class);
 	@Override
-	protected boolean isOverTime(){return true;}
-	@Override
-	protected boolean isSetSnoozeTime(){return true;}
-	@Override
-	protected boolean isOverSnoozeTime(){return true;}
-	@Override
 	protected List<Alert> getAlertList(){
 		List<Alert> alertList=new ArrayList<Alert>();
 		AlertType alertType = new AlertType(1, new Process(2, "宸ヨ壓鍙戝嚭"), new Process(3, "宸ヨ壓鏀跺洖"), 60 * 30,1,2);

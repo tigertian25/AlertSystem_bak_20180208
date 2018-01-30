@@ -19,19 +19,18 @@
 	</resultMap>
 
 	<select id="getProcess" parameterType="java.util.Map" resultMap="ProcessMap">
-		select
+		SELECT
 			*
-		from ALERTSYSTEM_PROCESS 
-		where 1=1
+		FROM ALERTSYSTEM_PROCESS 
+		WHERE 1=1
 		<if test="ztWorkingId != null and ztWorkingId !=''">
-		and ZT_WORKING_ID=#{ztWorkingId}
+		AND ZT_WORKING_ID=#{ztWorkingId}
 		</if>
 	</select>
 	
 	<!-- 获取所有未完成并且工艺发出未收回的版单-->
 	<select id="getAllStyleOfGOngYiSend"  resultMap="SampleOrderMap">
 		SELECT
-		  
 			ets.sID AS styleID,
 			ets.sNumber,
 			ets.xStyleNo,
@@ -46,8 +45,7 @@
 		LEFT JOIN ERPDB.dbo.lt_style_receive lsr ON lsr.rStyle_ID = ets.sID
 		WHERE
 			ets.xStatus = 2
-			and ets.xDataType=3
-			<!-- AND DATEDIFF(dd, ets.xDate2, GETDATE()) > 100 -->
+			AND ets.xDataType=3
 		ORDER BY
 			ets.sID DESC
 		
@@ -63,16 +61,7 @@
 			LEFT JOIN ERPDB.dbo.zt_empl emp ON lsi.rEmpl_ID = emp.sID
 		WHERE lsi.rStyle_ID=#{styleID}
 	</select>
-	<!-- <select id="getGongYiReceive" parameterType="int" resultType="Map">
-		SELECT
-			lsr.sID,
-			lsr.xDateTime AS 'fromTimestamp',
-			emp.xName AS 'employeeName'
-		FROM
-			ERPDB.dbo.lt_style_receive lsr
-			LEFT JOIN ERPDB.dbo.zt_empl emp ON lsr.rEmpl_ID = emp.sID
-		WHERE lsr.rStyle_ID=#{styleID}
-	</select> -->
+	
 	<select id="getHuaHuaSend" parameterType="int" resultType="Map">
 		SELECT
 			lsi2.sID,
@@ -87,16 +76,7 @@
 		WHERE
 			lsi2.rStyle_ID =#{styleID}
 	</select>
-<!-- 	<select id="getHuaHuaSend" parameterType="int" resultType="Map">
-		SELECT
-			lsi2.sID,
-			lsi2.xDateTime AS 'fromTimestamp',
-			emp.xName AS 'employeeName'
-		FROM
-			ERPDB.dbo.lt_style_issue2 lsi2
-			LEFT JOIN ERPDB.dbo.zt_empl emp ON lsi2.rEmpl_ID = emp.sID
-		WHERE lsi2.rStyle_ID=#{styleID}
-	</select> -->
+
 	<select id="getHuaHuaReceive" parameterType="int" resultType="Map">
 		SELECT
 			lsr2.sID,

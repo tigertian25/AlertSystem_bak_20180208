@@ -23,10 +23,10 @@ public class AlertBrowse extends AbstractWindow {
 	@Inject
 	private AlertListDatasource alertsDs;
 
-	@Override
-	public void init(Map<String, Object> params) {
-		//alertsDs.setMaxResults(50);// 一页锟斤拷示锟斤拷锟斤拷锟斤拷锟斤拷录
-	}
+//	@Override
+//	public void init(Map<String, Object> params) {
+//		alertsDs.setMaxResults(50);// 一页锟斤拷示锟斤拷锟斤拷锟斤拷锟斤拷录
+//	}
 
 	@Inject
 	protected Table<Alert> alertsTable;
@@ -35,12 +35,11 @@ public class AlertBrowse extends AbstractWindow {
     	Alert alert = alertsTable.getSingleSelected();
     	log.debug(gson.toJson(alert.getAlertType()));
     	AlertSnooze alertSnooze=new AlertSnooze();
-		// there is no need in checking that customer is not null if you use ItemTrackingAction
-		//String message ="锟斤拷选锟叫匡拷牛锟�"+ alert.getSampleOrder().getStyleNo();
 		alertSnooze.setAlertType(alert.getAlertType());
 		alertSnooze.setSampleOrderId(alert.getSampleOrder().getId());
-		openEditor("alertsystem$AlertSnooze.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
-		//openEditor("alertsystem$AlertSnooze2.edit",alertSnooze,WindowManager.OpenType.THIS_TAB);
+		openEditor("alertsystem$AlertSnooze.edit",alertSnooze,WindowManager.OpenType.THIS_TAB)
+		.addCloseWithCommitListener(() -> alertsDs.refresh());
+		
     }
     
     public void refreshData(Timer timer) {

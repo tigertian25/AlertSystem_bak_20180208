@@ -7,20 +7,14 @@ import java.util.Date;
 import org.apache.commons.lang.time.DateUtils;
 
 public class util {
-//	public static Date stringToDate(String dateStr) {
-//		System.out.println(dateStr);
-//		Date date = null;
-//		try {
-//			date = DateUtils.parseDate(dateStr, new String[] { "yyyy-MM-dd HH:mm:ss" });
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return date;
-//
-//	}
 
-	// 计算时间差工具
+
+	/**
+	 * 计算时间差工具
+	 * @param d1
+	 * @param d2
+	 * @return d1-d2
+	 */
 	public static String dateUtil(Date d1, Date d2) {
 		String timeDifference = "";
 		long l = d1.getTime() - d2.getTime();

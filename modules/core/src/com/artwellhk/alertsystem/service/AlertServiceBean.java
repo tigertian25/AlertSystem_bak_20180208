@@ -39,106 +39,80 @@ public class AlertServiceBean implements AlertService {
 	@Inject
 	private SnoozeAccessorService snoozeAccessor;
 
-	protected boolean isOverTime() {
-		return false;
-	}
+	/**
+	 * 判断超时的数据是否设置了睡眠 没设置睡眠，计算TimeDifference 如果设置了睡眠，判断有没有超过睡眠时间 没有超过睡眠时间，返回null，
+	 * 超过随眠时间，修改TimeDifference
+	 * 
+	 * @param alert
+	 * @param now
+	 * @param lastTimestamp
+	 * @return Alert
+	 */
+	protected Alert isSetSnoozeTime(Alert alert, Date now, Date lastTimestamp) {
+		alert.setTimeDifference(util.dateUtil(now, lastTimestamp));
 
-	protected boolean isSetSnoozeTime() {
-		return false;
-	}
+		AlertSnooze alertSnooze = snoozeAccessor.getSnooze(alert.getSampleOrder().getId(),
+				alert.getAlertType().getId());
+		if (null != alertSnooze) {// alertSnooze!= null 表示设置了睡眠
+			Date durationDate = alertSnooze.getCreateTs();
+			// snooze的创建时间加上设置的睡眠毫秒数等于睡眠时间
+			Date snoozeTime = DateUtils.addSeconds(durationDate, alertSnooze.getDuration());
+			// 没超过睡眠时间
+			if (now.getTime() < snoozeTime.getTime()) {
+				return null;
+			}
+			alert.setTimeDifference(util.dateUtil(now, snoozeTime));
+		}
 
-	protected boolean isOverSnoozeTime() {
-		return false;
+		setAlertTypeProcessInfo(alert.getAlertType());
+		return alert;
 	}
 
 	@Override
 	public Collection<Alert> calculateAlertList() {
-		System.out.println("enter calculateAlertList!!!!!!!!!! ");
 		Collection<Alert> returnAlertList = new ArrayList<Alert>();
 		List<Alert> alertList = getAlertList();
 
-		if (null != alertList && alertList.size() > 0) {
-			// for (Alert alert : alertList) {
-			// if (isOverTime()) {// 鏄惁瓒呮椂
-			// if (isSetSnoozeTime()) {// 鏄惁璁剧疆鐫＄湢
-			// if (isOverSnoozeTime()) {// 鏄惁瓒呰繃鐫＄湢鏃堕棿
-			// returnAlertList.add(alert);
-			// }
-			//
-			// } else {
-			// returnAlertList.add(alert);
-			// }
-			// }
-			// }
-			for (Alert alert : alertList) {// 寰幆璁＄畻瓒呮椂鐨勬暟鎹�
-				try {
-					String timeDifference = "";// 姝ゅ瓧娈电敤浜庢樉绀鸿秴鏃跺灏戞椂闂�
-					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					Date now = df.parse(df.format(new Date()));// 褰撳墠鏃堕棿
-					// 瓒呭嚭瑙勫畾鏃堕棿
-					int allowedDuration = alert.getAlertType().getAllowedDuration();// 瑙勫畾鏃堕檺
-					Date fromTimestamp = alert.getFromTimestamp();// 褰撳墠宸ュ簭瀹屾垚鏃堕棿
-					Date lastTimestamp = DateUtils.addSeconds(fromTimestamp, allowedDuration);// 瑙勫畾瀹屾垚鏃堕棿
-					alert.setLastTimestamp(lastTimestamp);
-					if (now.getTime() > lastTimestamp.getTime()&&(now.getTime()-lastTimestamp.getTime())>1000) {// 褰撳墠鏃堕棿澶т簬瑙勫畾鏃堕棿琛ㄧず瓒呮椂
-						AlertSnooze alertSnooze = snoozeAccessor.getSnooze(alert.getSampleOrder().getId(),
-								alert.getAlertType().getId());
-
-						if (alertSnooze != null && null!=alertSnooze.getId()) {// 璁剧疆浜嗙潯鐪�
-
-							Date durationDate = alertSnooze.getCreateTs();
-
-							Date snoozeTime = DateUtils.addSeconds(durationDate, allowedDuration);
-
-							if (now.getTime() > snoozeTime.getTime()&&(now.getTime()-snoozeTime.getTime())>1000) {// 褰撳墠鏃堕棿澶т簬鐫＄湢鍚庣殑鏃堕棿
-								timeDifference = util.dateUtil(now, snoozeTime);
-								alert.setTimeDifference(timeDifference);
-								setAlertTypeProcessInfo(alert.getAlertType());
-								returnAlertList.add(alert);
-								continue;
-							}
-
-						} else {
-
-							timeDifference = util.dateUtil(now, lastTimestamp);
-							alert.setTimeDifference(timeDifference);
-							setAlertTypeProcessInfo(alert.getAlertType());
-							returnAlertList.add(alert);
-							continue;
-						}
-
-					}
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		if (alertList.isEmpty()) {
+			return null;
+		}
+		for (Alert alert : alertList) {
+			Date now = new Date();
+			int allowedDuration = alert.getAlertType().getAllowedDuration();// 规定时限
+			Date fromTimestamp = alert.getFromTimestamp();// 当前工序完成时间
+			Date lastTimestamp = DateUtils.addSeconds(fromTimestamp, allowedDuration);// 预计下一工序完成时间
+			alert.setLastTimestamp(lastTimestamp);
+			// 如果当前时间大于预计下一工序完成时间，表示超时
+			if (now.getTime() > lastTimestamp.getTime() && (now.getTime() - lastTimestamp.getTime()) > 1000) {
+				if (null != (alert = isSetSnoozeTime(alert, now, lastTimestamp))) {
+					returnAlertList.add(alert);
 				}
-				
 			}
 		}
-		//log.debug("returnAlertList:"+gson.toJson(returnAlertList));
+
+		log.debug("returnAlertList:" + gson.toJson(returnAlertList));
 		return returnAlertList;
 
 	}
+
 	private void setAlertTypeProcessInfo(AlertType alertType) {
-		String fromInfo="发出";
-		String toInfo="发出";
-		if(2==alertType.getFromProcessType().getId()) {
-			fromInfo="收回";
+		String fromInfo = "发出";
+		String toInfo = "发出";
+		if (2 == alertType.getFromProcessType().getId()) {
+			fromInfo = "收回";
 		}
-		if(2==alertType.getToProcessType().getId()) {
-			toInfo="收回";
+		if (2 == alertType.getToProcessType().getId()) {
+			toInfo = "收回";
 		}
-		alertType.setFromProcessInfo(alertType.getFromProcess().getName()+fromInfo);
-		alertType.setToProcessInfo(alertType.getToProcess().getName()+toInfo);
+		alertType.setFromProcessInfo(alertType.getFromProcess().getName() + fromInfo);
+		alertType.setToProcessInfo(alertType.getToProcess().getName() + toInfo);
 
 	}
-
 
 	protected List<Alert> getAlertList() {
 		List<Alert> alertList = new LinkedList<Alert>();
 		List<SampleOrder> sampleOrderList = new LinkedList<SampleOrder>();
-		// 鏌ヨ鎵�鏈夋湭瀹屾垚涓斿伐鑹哄彂鍑烘湭鏀跺洖鐨勭増鍗�
-		
+
 		Transaction tx = persistence.createTransaction("ERPDB");
 		try {
 			SqlSession sqlSession = AppBeans.get("sqlSession_ERPDB");
@@ -149,7 +123,7 @@ public class AlertServiceBean implements AlertService {
 			e.printStackTrace();
 		}
 		alertList = alertTypeRetriever.retrieveList(sampleOrderList);
-		
+
 		return alertList;
 
 	}
