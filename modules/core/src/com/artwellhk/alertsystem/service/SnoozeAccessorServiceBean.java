@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.artwellhk.alertsystem.entity.AlertSnooze;
 import com.artwellhk.alertsystem.entity.AlertType;
+import com.artwellhk.alertsystem.entity.ReturnMsg;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
@@ -41,28 +42,6 @@ public class SnoozeAccessorServiceBean implements SnoozeAccessorService {
 		return alertSnooze;
 	}
 
-	@Override
-	public String insert(int sampleOrderId, int alertTypeId,int duration) {
-		String result="error";
-		AlertType alertType = new AlertType();
-    	try (Transaction tx = persistence.createTransaction()) {
-			EntityManager em = persistence.getEntityManager();
-			alertType = (AlertType) em.createQuery(
-					"select distinct a from alertsystem$AlertType a JOIN FETCH a.fromProcess f JOIN FETCH a.toProcess t "
-							+ " where a.id=:id order by a.id desc")
-					.setParameter("id", alertTypeId)
-					.getFirstResult();
-			tx.commit();
-		} catch (NoResultException e) {
-			return null;
-		}
-    	AlertSnooze alertSnooze = metadata.create(AlertSnooze.class);
-		alertSnooze.setAlertType(alertType);
-		alertSnooze.setSampleOrderId(sampleOrderId);
-		alertSnooze.setDuration(duration);
-		dataManager.commit(new CommitContext(alertSnooze));
-		result = "succese";
-		return result;
-	}
+	
 
 }

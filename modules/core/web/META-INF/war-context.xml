@@ -18,8 +18,8 @@
               maxTotal="20"
               maxWaitMillis="5000"
               name="jdbc/ERPDB"
-              password="DOsqQjZ05h0yjRtI1YaI"
+              password="tiger123456"
               type="javax.sql.DataSource"
-              url="jdbc:sqlserver://10.17.0.1;databaseName=ERPDB"
-              username="sample_track"/>
+              url="jdbc:sqlserver://10.52.0.52;databaseName=ERPDB"
+              username="sa"/>
 </Context>

@@ -89,6 +89,15 @@ public class SampleOrder extends BaseIntegerIdEntity {
 		this.styleNumber = styleNumber;
 		this.styleNo=styleNo;
 	}
+	public SampleOrder(int styleID, String styleNumber,String styleNo,Integer isReceive,String gongYiSendEmpl,Date gonYiSendTime,Date gongYiReceiveTime) {
+		this.id = styleID;
+		this.styleNumber = styleNumber;
+		this.styleNo=styleNo;
+		this.isReceive=isReceive;
+		this.gongYiSendEmpl=gongYiSendEmpl;
+		this.gonYiSendTime=gonYiSendTime;
+		this.gongYiReceiveTime=gongYiReceiveTime;
+	}
 
 	@Override
 	public String toString() {

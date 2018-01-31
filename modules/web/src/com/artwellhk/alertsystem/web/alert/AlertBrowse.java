@@ -1,5 +1,6 @@
 package com.artwellhk.alertsystem.web.alert;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -43,8 +44,7 @@ public class AlertBrowse extends AbstractWindow {
     }
     
     public void refreshData(Timer timer) {
-    	System.out.println("Timer is run");
-    	log.debug("Timer is runing");
+    	log.debug("Timer is runing:"+new Date());
     	alertsDs.refresh();
     }
 }

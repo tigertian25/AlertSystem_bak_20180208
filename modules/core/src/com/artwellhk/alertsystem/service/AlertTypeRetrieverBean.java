@@ -1,8 +1,6 @@
 package com.artwellhk.alertsystem.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,22 +10,17 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.artwellhk.alertsystem.core.util;
 import com.artwellhk.alertsystem.entity.Alert;
 import com.artwellhk.alertsystem.entity.AlertType;
-import com.artwellhk.alertsystem.entity.AlertTypeID;
 import com.artwellhk.alertsystem.entity.Process;
 import com.artwellhk.alertsystem.entity.ProcessIdEnum;
 import com.artwellhk.alertsystem.entity.ProcessType;
 import com.artwellhk.alertsystem.entity.SampleOrder;
-import com.esotericsoftware.minlog.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.haulmont.cuba.core.EntityManager;
@@ -43,7 +36,6 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 	private Persistence persistence;
 	
 	
-
 	@Override
 	public List<Alert> retrieveList(List<SampleOrder> sampleOrderList) {
 		List<Alert> alertList =  new LinkedList<Alert>();
@@ -327,106 +319,6 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 					return alert;
 				}
 		}
-		return null;
-	}
-
-	protected Boolean isTaoKouReceive() {
-		return true;
-	}
-
-	protected Boolean isShouFengSend() {
-		return true;
-	}
-
-	protected Boolean isShouFengReceive() {
-		return true;
-	}
-
-	protected Boolean isXiShuiSend() {
-		return true;
-	}
-
-	protected Boolean isXiShuiReceive() {
-		return true;
-	}
-
-	protected Boolean isTangYiSend() {
-		return true;
-	}
-
-	protected Boolean isTangYiReceive() {
-		return true;
-	}
-
-	protected Boolean isPingCheSend() {
-		return true;
-	}
-
-	protected Boolean isPingCheReceive() {
-		return true;
-	}
-
-	protected Alert gongYiSend(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert gongYiReceive(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert huaHuaSend(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert huaHuaReceive(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert dianJiSend(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert dianJiReceive(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert taoKouSend(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert taoKouReceive(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert shouFengSend(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert shouFengReceive(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert xiShuiSend(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert xiShuiReceive(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert tangYiSend(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert tangYiReceive(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert pingCheSend(SampleOrder sampleOrder) {
-		return null;
-	}
-
-	protected Alert pingCheReceive(SampleOrder sampleOrder) {
 		return null;
 	}
 

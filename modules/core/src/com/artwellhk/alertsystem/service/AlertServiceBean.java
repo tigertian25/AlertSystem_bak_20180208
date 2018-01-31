@@ -56,7 +56,7 @@ public class AlertServiceBean implements AlertService {
 		if (null != alertSnooze) {// alertSnooze!= null 表示设置了睡眠
 			Date durationDate = alertSnooze.getCreateTs();
 			// snooze的创建时间加上设置的睡眠毫秒数等于睡眠时间
-			Date snoozeTime = DateUtils.addSeconds(durationDate, alertSnooze.getDuration());
+			Date snoozeTime = DateUtils.addMilliseconds(durationDate, alertSnooze.getDuration());
 			// 没超过睡眠时间
 			if (now.getTime() < snoozeTime.getTime()) {
 				return null;
@@ -65,6 +65,7 @@ public class AlertServiceBean implements AlertService {
 		}
 
 		setAlertTypeProcessInfo(alert.getAlertType());
+		log.debug("isSetSnoozeTime=="+gson.toJson(alert));
 		return alert;
 	}
 
@@ -80,7 +81,7 @@ public class AlertServiceBean implements AlertService {
 			Date now = new Date();
 			int allowedDuration = alert.getAlertType().getAllowedDuration();// 规定时限
 			Date fromTimestamp = alert.getFromTimestamp();// 当前工序完成时间
-			Date lastTimestamp = DateUtils.addSeconds(fromTimestamp, allowedDuration);// 预计下一工序完成时间
+			Date lastTimestamp = DateUtils.addMilliseconds(fromTimestamp, allowedDuration);// 预计下一工序完成时间
 			alert.setLastTimestamp(lastTimestamp);
 			// 如果当前时间大于预计下一工序完成时间，表示超时
 			if (now.getTime() > lastTimestamp.getTime() && (now.getTime() - lastTimestamp.getTime()) > 1000) {
@@ -123,7 +124,7 @@ public class AlertServiceBean implements AlertService {
 			e.printStackTrace();
 		}
 		alertList = alertTypeRetriever.retrieveList(sampleOrderList);
-
+log.debug("getAlertList=="+gson.toJson(alertList));
 		return alertList;
 
 	}

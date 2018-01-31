@@ -5,12 +5,10 @@
             template="com/artwellhk/alertsystem/web/alerttype/alert-type-browse.xml"/>
     <screen id="alertsystem$Alert.browse"
             template="com/artwellhk/alertsystem/web/alert/alert-browse.xml"/>
-    <screen id="alertsystem$AlertSnooze.edit"
-            template="com/artwellhk/alertsystem/web/alertsnooze/alert-snooze-edit.xml"/>
-    <screen id="alertsystem$AlertSnooze2.edit"
-            template="com/artwellhk/alertsystem/web/alertsnooze/alert-snooze2-edit.xml"/>
     <screen id="alertsystem$Process.browse"
             template="com/artwellhk/alertsystem/web/process/process-browse.xml"/>
     <screen id="alertsystem$AlertSnooze.browse"
             template="com/artwellhk/alertsystem/web/alertsnooze/alert-snooze-browse.xml"/>
+    <screen id="alertsystem$AlertSnooze.edit"
+            template="com/artwellhk/alertsystem/web/alertsnooze/alert-snooze-edit.xml"/>
 </screen-config>

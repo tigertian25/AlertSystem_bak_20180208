@@ -211,7 +211,7 @@ apply from: 'extra.gradle'
 task buildWar(type: CubaWarBuilding) {
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
-    appProperties = ['cuba.automaticDatabaseUpdate' : true]
+    appProperties = ['cuba.automaticDatabaseUpdate' : false]
     includeContextXml = true
     includeJdbcDriver = true
     appHome = './alertSystem'
