@@ -192,7 +192,7 @@ public class AlertTypeRetrieverBean implements AlertTypeRetrieverService {
 			if(null!=alertType) {
 				Alert alert = new Alert(alertType, sampleOrder);
 				alert.setEmployeeName(sampleOrder.getGongYiSendEmpl());
-				alert.setFromTimestamp(sampleOrder.getGonYiSendTime());
+				alert.setFromTimestamp(sampleOrder.getGongYiSendTime());
 				return alert;
 			}
 		}

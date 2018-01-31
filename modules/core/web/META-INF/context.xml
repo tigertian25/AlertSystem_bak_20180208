@@ -8,20 +8,20 @@
               maxTotal="20"
               maxWaitMillis="5000"
               name="jdbc/ERPDB"
-              password="tiger123456"
+              password="DOsqQjZ05h0yjRtI1YaI"
               type="javax.sql.DataSource"
-              url="jdbc:sqlserver://10.52.0.52;databaseName=ERPDB"
-              username="sa"/>
+              url="jdbc:sqlserver://10.17.0.1;databaseName=ERPDB"
+              username="sample_track"/>
     <!--Data store 'ERPDB' connection-->
     <Resource driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
               maxIdle="2"
               maxTotal="20"
               maxWaitMillis="5000"
               name="jdbc/CubaDS"
-              password="tiger123456"
+              password="age5minnow"
               type="javax.sql.DataSource"
-              url="jdbc:sqlserver://10.52.0.52;databaseName=ALERTSYSTEM"
-              username="sa"/>
+              url="jdbc:sqlserver://10.17.0.1;databaseName=ALERTSYSTEM"
+              username="tiger"/>
     <!--<Resource driverClassName="org.hsqldb.jdbc.JDBCDriver"
           maxIdle="2"
           maxTotal="20"

@@ -24,18 +24,19 @@ public class SampleOrder extends BaseIntegerIdEntity {
     protected String gongYiSendEmpl;
 
     @MetaProperty
-    protected Date gonYiSendTime;
+    protected Date gongYiSendTime;
 
     @MetaProperty
     protected Date gongYiReceiveTime;
 
 
-    public Date getGonYiSendTime() {
-        return gonYiSendTime;
+
+    public void setGongYiSendTime(Date gongYiSendTime) {
+        this.gongYiSendTime = gongYiSendTime;
     }
 
-    public void setGonYiSendTime(Date gonYiSendTime) {
-        this.gonYiSendTime = gonYiSendTime;
+    public Date getGongYiSendTime() {
+        return gongYiSendTime;
     }
 
 
@@ -89,13 +90,13 @@ public class SampleOrder extends BaseIntegerIdEntity {
 		this.styleNumber = styleNumber;
 		this.styleNo=styleNo;
 	}
-	public SampleOrder(int styleID, String styleNumber,String styleNo,Integer isReceive,String gongYiSendEmpl,Date gonYiSendTime,Date gongYiReceiveTime) {
+	public SampleOrder(int styleID, String styleNumber,String styleNo,Integer isReceive,String gongYiSendEmpl,Date gongYiSendTime,Date gongYiReceiveTime) {
 		this.id = styleID;
 		this.styleNumber = styleNumber;
 		this.styleNo=styleNo;
 		this.isReceive=isReceive;
 		this.gongYiSendEmpl=gongYiSendEmpl;
-		this.gonYiSendTime=gonYiSendTime;
+		this.gongYiSendTime=gongYiSendTime;
 		this.gongYiReceiveTime=gongYiReceiveTime;
 	}
 
